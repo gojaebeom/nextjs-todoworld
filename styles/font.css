@@ -1,0 +1,9 @@
+/** 노토산스 */
+@font-face {
+  font-family: "noto-b";
+  src: url("../src/assets/fonts/NotoSans-Bold.ttf");
+}
+@font-face {
+  font-family: "noto-r";
+  src: url("../src/assets/fonts/NotoSans-Regular.ttf");
+}
