@@ -1,21 +1,20 @@
 import Link from "next/link";
 import { useForm } from "react-hook-form";
 import { ThemeButton, ThemeInput } from "src/components";
-import { useTheme } from "src/hooks";
+import { withPublic } from "src/hoc";
+import { useTheme, useUser } from "src/hooks";
 
-export default function HomePage() {
+export default withPublic(function HomePage() {
   const {
     register,
     handleSubmit,
     formState: { errors },
   } = useForm();
 
+  const { signInByFirebase } = useUser();
+
   const { theme, getMatchedThemeData } = useTheme();
   const { themeColor } = getMatchedThemeData();
-
-  const store = (result) => {
-    console.debug(result);
-  };
 
   return (
     <>
@@ -34,7 +33,7 @@ export default function HomePage() {
       </div>
       <div className="z-10 flex flex-col items-start justify-center w-1/2 h-full p-12 bg-white">
         <form
-          onSubmit={handleSubmit(store)}
+          onSubmit={handleSubmit(signInByFirebase)}
           className="min-w-[350px] max-w-[350px]"
         >
           <ThemeInput
@@ -98,4 +97,4 @@ export default function HomePage() {
       </div>
     </>
   );
-}
+});

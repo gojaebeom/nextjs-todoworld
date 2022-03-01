@@ -1,9 +1,10 @@
 import Link from "next/link";
 import { useForm } from "react-hook-form";
 import { ThemeButton, ThemeInput } from "src/components";
+import { withPublic } from "src/hoc";
 import { useTheme, useUser } from "src/hooks";
 
-export default function SignPage() {
+export default withPublic(function SignUpPage() {
   const {
     register,
     handleSubmit,
@@ -76,4 +77,4 @@ export default function SignPage() {
       </div>
     </>
   );
-}
+});

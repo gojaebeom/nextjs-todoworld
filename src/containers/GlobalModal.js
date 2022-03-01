@@ -14,7 +14,7 @@ export default function GlobalModal({ children }) {
     >
       {/** @모달_박스 */}
       <div
-        className={`min-w-[350px]  pb-0 flex flex-col bg-white overflow-hidden shadow-lg transition-all duration-200 cursor-default
+        className={`min-w-[350px]  pb-0 flex flex-col bg-white text-black overflow-hidden shadow-lg transition-all duration-200 cursor-default
         ${theme.rounded && "rounded-lg"}`}
         onClick={(e) => {
           e.stopPropagation();
@@ -28,7 +28,7 @@ export default function GlobalModal({ children }) {
         {/** @모달_메인 */}
         <div className="p-2">{children}</div>
         {/** @모달_하단디자인 */}
-        <div className={`w-full border-4 ${borderStyles}`}></div>
+        <div className={`w-full border-2 ${borderStyles}`}></div>
       </div>
     </div>
   );

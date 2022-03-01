@@ -2,9 +2,9 @@ import { useTheme } from "src/hooks";
 
 export default function ThemeButton({
   type,
-  m = "my-4",
   children,
   clickEvent,
+  className = "my-4",
 }) {
   const { theme, getMatchedThemeData } = useTheme();
   const { buttonStyles } = getMatchedThemeData();
@@ -13,9 +13,9 @@ export default function ThemeButton({
   return (
     <button
       className={`
-        w-full px-4 py-2 text-center transition duration-100 delay-150 ease-in font-semibold 
+        w-full px-4 py-2 text-center transition duration-100 delay-150 ease-in
         text-white focus:ring-offset-white focus:outline-none focus:ring-2
-        focus:ring-offset-2 ${buttonStyles} ${roundStyle} ${m}`}
+        focus:ring-offset-2 ${buttonStyles} ${roundStyle} ${className}`}
       onClick={clickEvent}
       type={type}
     >

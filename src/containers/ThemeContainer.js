@@ -1,5 +1,5 @@
 import { ParticleContainer } from "src/containers";
-import { useGlobalModal, useTheme } from "src/hooks";
+import { useGlobalModal, useLoading, useTheme } from "src/hooks";
 import GlobalModal from "./GlobalModal";
 
 export default function ThemeContainer({ children }) {
@@ -13,6 +13,7 @@ export default function ThemeContainer({ children }) {
   } = useTheme();
   const { themeColor } = getMatchedThemeData();
   const { openModal, drawTypeMatchedModal } = useGlobalModal();
+  const { isLoading } = useLoading();
 
   return (
     <div
@@ -33,6 +34,17 @@ export default function ThemeContainer({ children }) {
       </button>
       {/** @파티클효과 */}
       <ParticleContainer />
+
+      {/** @로딩화면 */}
+      {isLoading && (
+        <div className="fixed z-[100] w-full h-full bg-black/30">
+          <div className="loader">
+            <div className="inner one"></div>
+            <div className="inner two"></div>
+            <div className="inner three"></div>
+          </div>
+        </div>
+      )}
 
       {/** @글로벌모달_테마타입 */}
       {drawTypeMatchedModal(

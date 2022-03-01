@@ -1,7 +1,10 @@
-import { useState } from "react";
+/* eslint-disable react-hooks/exhaustive-deps */
+import { useRouter } from "next/router";
+import { useEffect, useState } from "react";
 import { atom, useRecoilState } from "recoil";
 import { catchHandler } from "src/util/catchHandler";
 import { auth, db } from "src/util/firebase";
+import { useLoading } from ".";
 
 const credentialUserState = atom({
   key: "credentialUserState",
@@ -10,6 +13,7 @@ const credentialUserState = atom({
 
 export default function useUser() {
   const [user, setUser] = useRecoilState(credentialUserState);
+  const { loadingOn, loadingOff } = useLoading();
   const [credentialCheck, setcredentialCheck] = useState(false);
 
   /**@로그인상태감지_리스너 */
@@ -55,14 +59,32 @@ export default function useUser() {
   /**@파이어베이스_회원가입 */
   const signUpByFirebase = async (form) => {
     console.debug(form);
-    // setLoading(true);
+    loadingOn();
     await auth
       .createUserWithEmailAndPassword(form.email, form.password)
       .catch((error) => {
         console.debug(error);
-        catchHandler("회원가입에 실패하였습니다.");
+        catchHandler("회원가입에 실패하였습니다.", () => loadingOff());
       });
-    // setLoading(true);
+    loadingOff();
+  };
+
+  /**@파이어베이스_로그인 */
+  const signInByFirebase = async (form) => {
+    console.debug(form);
+    loadingOn();
+    await auth
+      .signInWithEmailAndPassword(form.email, form.password)
+      .catch((error) => {
+        console.debug(error);
+        catchHandler("회원가입에 실패하였습니다.", () => loadingOff());
+      });
+    loadingOff();
+  };
+
+  /**@파이어베이스_로그아웃 */
+  const signOutByFirebase = async () => {
+    auth.signOut();
   };
 
   return {
@@ -71,5 +93,7 @@ export default function useUser() {
     onFirebaseAuthStateChanged,
     setUser,
     signUpByFirebase,
+    signInByFirebase,
+    signOutByFirebase,
   };
 }

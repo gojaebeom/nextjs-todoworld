@@ -1,6 +1,6 @@
 import ThemeContainer from "./ThemeContainer";
 import ParticleContainer from "./ParticleContainer";
-import CredentialsContainer from "./CredentialsContainer";
+import ScaffoldContainer from "./ScaffoldContainer";
 import GlobalModal from "./GlobalModal";
 
-export { ThemeContainer, ParticleContainer, CredentialsContainer, GlobalModal };
+export { ThemeContainer, ParticleContainer, ScaffoldContainer, GlobalModal };
