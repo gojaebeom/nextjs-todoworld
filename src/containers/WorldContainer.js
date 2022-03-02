@@ -1,7 +1,13 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import Image from "next/image";
 import Link from "next/link";
-import { useGlobalModal, useTheme, useUser, useWorld } from "src/hooks";
+import {
+  useGlobalModal,
+  useSchejule,
+  useTheme,
+  useUser,
+  useWorld,
+} from "src/hooks";
 import { useRouter } from "next/router";
 import defaultImg from "src/assets/images/default_avatar.svg";
 import { ImageOrDefault } from "src/components";
@@ -14,7 +20,8 @@ export default function WorldContainer({ children }) {
   const { theme, getMatchedThemeData } = useTheme();
   const { particleColor, themeColor } = getMatchedThemeData();
   const { openModal, drawTypeMatchedModal } = useGlobalModal();
-  const { isValidWorldByWid } = useWorld();
+  const { worldDetail, isValidWorldByWid } = useWorld();
+  const { setScheduleListStream } = useSchejule();
 
   // ? URL 파싱
   const { pathname, asPath } = useRouter();
@@ -24,11 +31,18 @@ export default function WorldContainer({ children }) {
   // ? 월드 입장시 유효한 월드인지 판단, 월드 디테일 값 저장
   useEffect(() => isValidWorldByWid(id), []);
 
+  // ? 월드 입장시 월드의 스케줄리스트 저장
+  useEffect(() => {
+    if (worldDetail?.id) {
+      setScheduleListStream();
+    }
+  }, [worldDetail]);
+
   return (
     <>
       <aside className="w-[300px] min-w-[300px] h-full z-20">
         <figure className="flex items-center justify-center w-full py-6 text-lg text-white">
-          호호컴퍼니
+          {worldDetail?.name}
         </figure>
         <div className="flex flex-col items-center justify-center mt-10 text-white">
           <ImageOrDefault

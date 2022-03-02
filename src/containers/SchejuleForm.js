@@ -34,7 +34,7 @@ export default function SchejuleForm() {
     >
       <ThemeArea
         reactHookFormObj={{
-          ...register("content", {
+          ...register("title", {
             required: "업무 내용은 필수입니다.",
             minLength: {
               value: 2,
@@ -43,7 +43,7 @@ export default function SchejuleForm() {
           }),
         }}
         label="업무내용"
-        name="content"
+        name="title"
         type="text"
         placeholder={`간단하게 일정을 작성해보세요.\n상세한 일정은 더더욱 좋아요!`}
         errors={errors}
