@@ -1,19 +1,27 @@
 import { useRouter } from "next/router";
 import { atom, useRecoilState } from "recoil";
 import { db, storage } from "src/util/firebase";
-import { useLoading, useUser } from ".";
+import { useGlobalModal, useLoading, useUser } from ".";
 import { v4 } from "uuid";
+import { catchHandler } from "src/util/catchHandler";
 
 const worldListState = atom({
   key: "worldListState",
   default: [],
 });
 
+const worldDetailState = atom({
+  key: "worldDetailState",
+  default: null,
+});
+
 export default function useWorld() {
   const [worldList, setWorldList] = useRecoilState(worldListState);
+  const [worldDetail, setWorldDetail] = useRecoilState(worldDetailState);
   const { user } = useUser();
   const Router = useRouter();
   const { loadingOff, loadingOn } = useLoading();
+  const { closeModal } = useGlobalModal();
 
   // ? 유효한 월드에 진입했는지 판단
   const isValidWorldByWid = async (wid) => {
@@ -29,30 +37,36 @@ export default function useWorld() {
       window.alert("잘못된 접근입니다.");
       return Router.replace("/404");
     }
+
+    setWorldDetail({
+      id: worldRef.id,
+      ...worldRef.data(),
+    });
   };
 
   // ? 로그인중인 유저의 월드리스트 추출 및 전역상태 값 할당
   const setWorldListByCredentialsUser = async () => {
-    // 월드와유저의 관계 컬렉션중 로그인중인 유저가 속한 월드리스트 추출
-    const worldUserRef = await db
-      .collection("worldUsers")
-      .where("userId", "==", user.id)
-      .get();
+    const worldRef = await db.collection("worlds").get();
 
-    // 유저가 속한 월드만 있는 월드유저 컬랙션 순회
-    const list = await Promise.all(
-      worldUserRef.docs.map(async (worldUser) => {
-        const worldRef = await db
-          .collection("worlds")
-          .doc(worldUser.data().worldId)
-          .get();
-        return {
-          id: worldRef.id,
-          ...worldRef.data(),
-        };
-      })
-    );
+    let list = [];
+    worldRef.docs.forEach((world) => {
+      console.debug(world.data());
+      let isMatched = false;
+      world.data().members.forEach((member) => {
+        console.debug(member);
+        if (user.id === member) {
+          isMatched = true;
+        }
+      });
+      if (isMatched) {
+        list.push({
+          id: world.id,
+          ...world.data(),
+        });
+      }
+    });
     console.debug(list);
+
     // 전역에 있는 월드리스트를 새로운 배열로 덮어쓰기
     setWorldList(list);
   };
@@ -70,12 +84,12 @@ export default function useWorld() {
 
       await thumbnailRef.put(file).catch((error) => {
         console.debug(error);
-        catchAlert("썸네일 저장에 실패했습니다.", () => loadingOff());
+        catchHandler("썸네일 저장에 실패했습니다.", () => loadingOff());
       });
 
       url = await thumbnailRef.getDownloadURL().catch((error) => {
         console.debug(error);
-        catchAlert("다운로드URL을 가져오지 못했습니다.", () => loadingOff());
+        catchHandler("다운로드URL을 가져오지 못했습니다.", () => loadingOff());
       });
     }
 
@@ -83,29 +97,32 @@ export default function useWorld() {
     const worldRef = await db.collection("worlds").add({
       thumbnailURL: url,
       name: form.name,
+      teams: [],
+      members: [user.id],
+      schejules: [],
     });
 
-    // 월드 맴버 생성
-    await db.collection("worldUsers").add({
-      userId: user.id,
-      worldId: worldRef.id,
-      role: "ADMIN",
-    });
-
-    // 한번더 데이터 통신을 하지 않기 위해 전역에 있는 월드리스트에
-    // 저장한 객체를 직접 추가, 이후 새로고침할 경우엔 자연스럽게 setWorldListByUserId를 통해 리스트 가져오기
-    // ! 객체를 하나의 클래스로 일관성 있게 관리하는게 아니기때문에 변경시 여러곳 수정 문제 발생 가능성 있음
     setWorldList([
       ...worldList,
       {
         id: worldRef.id,
         thumbnailURL: url,
         name: form.name,
+        teams: [],
+        members: [user.id],
+        schejules: [],
       },
     ]);
 
     loadingOff();
+    closeModal();
   };
 
-  return { worldList, isValidWorldByWid, setWorldListByCredentialsUser, store };
+  return {
+    worldList,
+    worldDetail,
+    isValidWorldByWid,
+    setWorldListByCredentialsUser,
+    store,
+  };
 }

@@ -1,0 +1,44 @@
+.fc .fc-header-toolbar {
+  padding-bottom: 0px !important;
+  margin: 0px !important;
+}
+.fc .fc-toolbar-chunk div {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.fc-toolbar-title {
+  margin-top: 4px !important;
+}
+/* 캘린더 버튼 */
+.fc .fc-button {
+  background: none !important;
+  border: none !important;
+  color: #6e6e6e !important;
+}
+.fc .fc-button:focus {
+  box-shadow: none !important;
+}
+
+/* .fc .fc-scroller {
+  border: none !important;
+  border-bottom: none;
+} */
+
+.fc table {
+  border: none !important;
+}
+.fc th {
+  border: none !important;
+  color: gray !important;
+  padding: 4px 0px !important;
+}
+.fc tr {
+  border: none !important;
+}
+
+.fc td {
+  border: 1px solid #f2f2f2 !important;
+  border-left: none !important;
+  border-right: none !important;
+}

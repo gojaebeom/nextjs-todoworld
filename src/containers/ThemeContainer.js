@@ -17,7 +17,7 @@ export default function ThemeContainer({ children }) {
 
   return (
     <div
-      className="fixed top-0 left-0 z-20 flex w-full h-screen transition-all duration-200 font-noto-r"
+      className="fixed top-0 left-0 flex w-full h-screen transition-all duration-200 font-noto-r"
       style={{
         backgroundColor: themeColor,
       }}
@@ -25,7 +25,7 @@ export default function ThemeContainer({ children }) {
       {children}
       {/** @THEME_SETTING_MODAL_OPEN_BUTTON  */}
       <button
-        className="absolute z-10 text-white left-8 bottom-8 hover:animate-pulse"
+        className="absolute z-30 text-white left-8 bottom-8 hover:animate-pulse"
         onClick={() => {
           openModal("THEME", "테마 설정", true);
         }}

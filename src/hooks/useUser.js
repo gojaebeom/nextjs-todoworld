@@ -1,10 +1,12 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import { useRouter } from "next/router";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { atom, useRecoilState } from "recoil";
 import { catchHandler } from "src/util/catchHandler";
-import { auth, db } from "src/util/firebase";
-import { useLoading } from ".";
+import { auth, db, storage } from "src/util/firebase";
+import { useGlobalModal, useLoading } from ".";
+import { v4 } from "uuid";
+import axios from "axios";
+import { useRouter } from "next/router";
 
 const credentialUserState = atom({
   key: "credentialUserState",
@@ -15,6 +17,8 @@ export default function useUser() {
   const [user, setUser] = useRecoilState(credentialUserState);
   const { loadingOn, loadingOff } = useLoading();
   const [credentialCheck, setcredentialCheck] = useState(false);
+  const { closeModal } = useGlobalModal();
+  const Router = useRouter();
 
   /**@로그인상태감지_리스너 */
   const onFirebaseAuthStateChanged = () => {
@@ -77,9 +81,55 @@ export default function useUser() {
       .signInWithEmailAndPassword(form.email, form.password)
       .catch((error) => {
         console.debug(error);
-        catchHandler("회원가입에 실패하였습니다.", () => loadingOff());
+        catchHandler("로그인에 실패하였습니다.", () => loadingOff());
       });
     loadingOff();
+  };
+
+  /**@회원_정보_수정 */
+  const edit = async (form, file) => {
+    loadingOn();
+
+    let url = "";
+    if (file) {
+      console.debug("파일존재");
+      const storageRef = storage.ref();
+      const randomId = v4();
+      const profileRef = storageRef.child(`profile/${randomId}.png`);
+
+      // ! 기존에 유저의 프로필 사진이 있다면 해당 프로필 사진을 삭제하는 로직 필요 (미구현)
+
+      await profileRef.put(file).catch((error) => {
+        console.debug(error);
+        catchHandler("썸네일 저장에 실패했습니다.", () => loadingOff());
+      });
+
+      url = await profileRef.getDownloadURL().catch((error) => {
+        console.debug(error);
+        catchHandler("다운로드URL을 가져오지 못했습니다.", () => loadingOff());
+      });
+    }
+
+    // 회원 생성
+    await db
+      .collection("users")
+      .doc(user.id)
+      .set({
+        ...user,
+        profileURL: url,
+        nickname: form.nickname,
+        phoneNumber: form.phoneNumber,
+      });
+
+    setUser({
+      ...user,
+      profileURL: url,
+      nickname: form.nickname,
+      phoneNumber: form.phoneNumber,
+    });
+
+    loadingOff();
+    closeModal();
   };
 
   /**@파이어베이스_로그아웃 */
@@ -87,8 +137,36 @@ export default function useUser() {
     auth.signOut();
   };
 
+  /**@회원_탈퇴 */
+  const destroy = async () => {
+    const result = window.prompt(
+      `탈퇴하려면 회원 ID '${user.id}'를 입력해주세요.`
+    );
+    if (result !== user.id) return false;
+
+    loadingOn();
+
+    //? db 삭제
+    await db.collection("users").doc(user.id).delete();
+
+    //? auth 삭제
+    await axios({
+      method: "delete",
+      url: `https://asia-northeast3-todo-world-a0263.cloudfunctions.net/users/delete-user?uid=${user.id}`,
+    }).catch((error) => {
+      console.debug(error);
+      catchHandler("회원 탈퇴에 실패하였습니다.", () => loadingOff());
+    });
+    window.alert("그동안 투두월드를 이용해주셔서 감사합니다.");
+    auth.signOut();
+    loadingOff();
+    closeModal();
+  };
+
   return {
     user,
+    edit,
+    destroy,
     credentialCheck,
     onFirebaseAuthStateChanged,
     setUser,

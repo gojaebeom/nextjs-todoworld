@@ -6,6 +6,7 @@ export default function ThemeInput({
   name = "label",
   type = "text",
   placeholder = "input value.",
+  value = "",
   errors,
 }) {
   const { theme, getMatchedThemeData } = useTheme();
@@ -20,6 +21,7 @@ export default function ThemeInput({
         className={`w-full p-2 text-base border  focus:outline-none focus:border-transparent focus:ring-2 ${inputStyles} ${roundStyle}`}
         placeholder={placeholder}
         type={type}
+        defaultValue={value}
       />
       {errors[name] && (
         <span className="mt-1 text-xs text-red-500">

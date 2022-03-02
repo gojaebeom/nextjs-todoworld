@@ -1,13 +1,19 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { ScaffoldContainer, ThemeContainer } from "src/containers";
+import { RecoilRoot } from "recoil";
+import DebugObserver from "src/components/DebugObserver";
+
 import "styles/globals.css";
 import "styles/font.css";
 import "styles/loading.css";
-import { RecoilRoot } from "recoil";
+import "styles/rainbow-button.css";
+import "styles/custom-daterange.css";
+import "styles/calendar.css";
 
 function MyApp({ Component, pageProps }) {
   return (
     <RecoilRoot>
+      <DebugObserver />
       <ScaffoldContainer>
         <ThemeContainer>
           <Component {...pageProps} />
