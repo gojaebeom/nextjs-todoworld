@@ -6,9 +6,9 @@ import DebugObserver from "src/components/DebugObserver";
 import "styles/globals.css";
 import "styles/font.css";
 import "styles/loading.css";
-import "styles/rainbow-button.css";
-import "styles/custom-daterange.css";
 import "styles/calendar.css";
+import "styles/scroll.css";
+import "styles/custom-daterange.css";
 
 function MyApp({ Component, pageProps }) {
   return (

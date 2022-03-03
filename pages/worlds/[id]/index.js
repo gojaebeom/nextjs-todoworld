@@ -9,8 +9,8 @@ import {
 } from "src/hooks";
 import { useRouter } from "next/router";
 import { ImageOrDefault } from "src/components";
-import { useEffect } from "react";
-import { GlobalModal } from "src/containers";
+import { useEffect, useState } from "react";
+import { GlobalModal, MemberRoom } from "src/containers";
 import { ScheduleRoom, ScheduleForm } from "src/containers";
 import { withPrivate } from "src/hoc";
 
@@ -19,7 +19,7 @@ export default withPrivate(function WorldPage() {
   const { theme, getMatchedThemeData } = useTheme();
   const { particleColor, themeColor } = getMatchedThemeData();
   const { openModal, drawTypeMatchedModal } = useGlobalModal();
-  const { worldDetail, isValidWorldByWid } = useWorld();
+  const { worldDetail, isValidWorldByWid, setWorldDetailStream } = useWorld();
   const { setScheduleListStream } = useSchedule();
 
   // ? URL 파싱
@@ -28,12 +28,20 @@ export default withPrivate(function WorldPage() {
   // ? 월드 입장시 유효한 월드인지 판단, 월드 디테일 값 저장
   useEffect(() => isValidWorldByWid(query.id), []);
 
+  // ? 월드 입장시 상세월드 데이터 저장
+  useEffect(() => {
+    const unsub = setWorldDetailStream(query.id);
+    return () => unsub();
+  }, []);
+
   // ? 월드 입장시 월드의 스케줄리스트 저장
   useEffect(() => {
     if (worldDetail?.id) {
       setScheduleListStream();
     }
   }, [worldDetail]);
+
+  const [exp, setExp] = useState(0);
 
   return (
     <>
@@ -42,30 +50,34 @@ export default withPrivate(function WorldPage() {
           {worldDetail?.name}
         </figure>
         <div className="flex flex-col items-center justify-center mt-10 text-white">
-          <ImageOrDefault
-            className="rounded-full"
-            src={user?.profileImg}
-            alt="img"
-            width={80}
-            height={80}
-          />
+          <div className="relative flex items-center justify-center w-[90px] h-[90px] overflow-hidden rounded-full ">
+            <ImageOrDefault
+              className="z-10 rounded-full"
+              src={user?.profileURL}
+              alt="img"
+              width={80}
+              height={80}
+            />
+            <div
+              className="absolute bottom-0 left-0 w-full transition-all delay-75 rounded-3xl"
+              style={{ backgroundColor: "white", height: exp + "%" }}
+            ></div>
+          </div>
+          <button onClick={() => setExp(exp + 30)}>경험치 증가</button>
           <p className="mt-1">{user?.nickname}</p>
         </div>
 
-        <div className="flex items-center justify-center w-full px-4 mt-6">
+        <div className="flex items-center justify-center w-full px-6 mt-6">
           <button
-            className="w-full px-4 py-2 font-bold border-white rounded-md shadow-md"
-            style={{
-              backgroundColor: particleColor,
-              color: themeColor,
-            }}
+            className="w-full px-4 py-2 text-black bg-white rounded-md"
             onClick={() => openModal("SCHEDULE_FORM", "일정 작성")}
           >
-            Create Schejule
+            일정 작성하기
+            <i className="ml-2 fa-light fa-pen-line"></i>
           </button>
         </div>
 
-        <nav className="flex flex-col items-start justify-center w-full mt-10 text-lg text-white font-apple-r">
+        <nav className="flex flex-col items-start justify-center w-full mt-6 text-lg text-white font-apple-r">
           {/** @NAV_ITEM  */}
           <Link
             href="/worlds/[id]?room=home"
@@ -108,13 +120,13 @@ export default withPrivate(function WorldPage() {
             <a className="relative z-10 flex items-center justify-start w-full mt-4">
               <div
                 className={`flex items-center justify-between px-10 py-1 rounded-r-full 
-            ${query.room === "members" && "text-black bg-white"}`}
+            ${query.room === "members" && "text-black bg-gray-100"}`}
               >
                 <i className="mr-2 fa-light fa-user"></i>
                 <p>Members</p>
               </div>
               {query.room === "members" && (
-                <div className="absolute -right-5 w-[30px] h-[30px] bg-white rotate-45"></div>
+                <div className="absolute -right-5 w-[30px] h-[30px] bg-gray-100 rotate-45"></div>
               )}
             </a>
           </Link>
@@ -156,6 +168,7 @@ export default withPrivate(function WorldPage() {
         ${!theme.roomSizeUp && "rounded-md"}`}
         >
           {query.room === "schedules" && <ScheduleRoom />}
+          {query.room === "members" && <MemberRoom />}
         </main>
       </div>
       {/** @글로벌모달_유저수정타입 */}

@@ -6,7 +6,7 @@ import { useSchedule, useTheme } from "src/hooks";
 export default function ScheduleRoom() {
   const { scheduleList } = useSchedule();
   const { getMatchedThemeData } = useTheme();
-  const { themeColor } = getMatchedThemeData();
+  const { themeColor, particleColor } = getMatchedThemeData();
 
   return (
     <>
@@ -36,19 +36,19 @@ export default function ScheduleRoom() {
           dayMaxEvents={true} // 이벤트가 오버되면 높이 제한 (+ 몇 개식으로 표현)
           //scheduleList
           events={scheduleList}
-          // eventContent={(target) => {
-          //   const title = target.event.title;
-          //   return (
-          //     <div>
-          //       <div
-          //         className="pl-2 rounded-3xl"
-          //         style={{ backgroundColor: themeColor }}
-          //       >
-          //         {title}
-          //       </div>
-          //     </div>
-          //   );
-          // }}
+          eventContent={(target) => {
+            const title = target.event.title;
+            return (
+              <div className="bg-white rounded-3xl">
+                <div
+                  className="px-2 overflow-hidden text-black border border-white rounded-3xl"
+                  style={{ backgroundColor: particleColor }}
+                >
+                  {title}
+                </div>
+              </div>
+            );
+          }}
           // eslint-disable-next-line react/jsx-no-duplicate-props
         />
       </div>

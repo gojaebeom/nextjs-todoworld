@@ -6,6 +6,8 @@ import WorldStoreForm from "./WorldStoreForm";
 import UserEditForm from "./UserEditForm";
 import ScheduleRoom from "./ScheduleRoom";
 import ScheduleForm from "./ScheduleForm";
+import MemberRoom from "./MemberRoom";
+import MemberInviteForm from "./MemberInviteForm";
 
 export {
   ThemeContainer,
@@ -16,4 +18,6 @@ export {
   UserEditForm,
   ScheduleForm,
   ScheduleRoom,
+  MemberRoom,
+  MemberInviteForm,
 };

@@ -10,33 +10,52 @@ import { withPrivate } from "src/hoc";
 import { useGlobalModal, useUser, useWorld } from "src/hooks";
 
 export default withPrivate(function MyPage() {
-  const { user, signOutByFirebase } = useUser();
-  const { worldList, setWorldListByCredentialsUser } = useWorld();
+  const { user, signOutByFirebase, inviteMessageList, setInviteStream } =
+    useUser();
+  const { worldList, setWorldListByCredentialsUser, join } = useWorld();
   const { drawTypeMatchedModal, openModal } = useGlobalModal();
 
+  useEffect(async () => {
+    const unsub = await setWorldListByCredentialsUser();
+    return () => unsub();
+  }, []);
+
   useEffect(() => {
-    setWorldListByCredentialsUser();
+    const unsub = setInviteStream();
+    return () => unsub();
   }, []);
 
   return (
     <div className="z-10 flex flex-col items-center justify-center w-full text-white">
       <div className="flex flex-col items-center justify-center mb-10">
-        <ImageOrDefault
-          src={user?.profileURL}
-          width={80}
-          height={80}
-          alt="image"
-          className="w-20 h-20 border-2 border-white rounded-full"
-        />
+        <div className="flex items-center justify-center bg-white border-2 border-white rounded-full">
+          <ImageOrDefault
+            src={user?.profileURL}
+            width={80}
+            height={80}
+            alt="image"
+            className="w-20 h-20 border-2 border-white rounded-full"
+          />
+        </div>
+
         <p className="text-lg font-noto-r">{user?.nickname}</p>
         <p className="text-xs">{user?.id}</p>
-        <button
-          className="flex items-center p-2 px-4 mt-4 border"
-          onClick={() => openModal("USER_EDIT", "회원정보 변경")}
-        >
-          프로필 수정
-          <i className="ml-2 fa-light fa-pencil"></i>
-        </button>
+        <div className="flex items-center justify-center mt-4">
+          <button
+            className="flex items-center p-2 px-4 mx-2 border"
+            onClick={() => openModal("USER_EDIT", "회원정보 변경")}
+          >
+            프로필 수정
+            <i className="ml-2 fa-light fa-pencil"></i>
+          </button>
+          <button
+            className="flex items-center p-2 px-4 mx-2 border"
+            onClick={signOutByFirebase}
+          >
+            로그아웃
+            <i className="ml-2 fa-light fa-right-from-bracket"></i>
+          </button>
+        </div>
       </div>
       <div className="flex flex-col items-center">
         <p className="mb-4 text-3xl font-noto-b">
@@ -69,7 +88,7 @@ export default withPrivate(function MyPage() {
         </div>
 
         <button
-          className="flex flex-col items-center mt-1"
+          className="flex flex-col items-center mt-4"
           onClick={() => openModal("WORLD_STORE", "투두월드 만들기")}
         >
           <div className="flex items-center justify-center w-16 h-16 rounded-md">
@@ -78,13 +97,6 @@ export default withPrivate(function MyPage() {
           <p className="text-xs">투두월드 추가</p>
         </button>
       </div>
-
-      <button
-        className="flex items-center p-2 px-4 mt-20 border"
-        onClick={signOutByFirebase}
-      >
-        로그아웃
-      </button>
 
       {/** @글로벌모달_테마타입 */}
       {drawTypeMatchedModal(
@@ -101,6 +113,51 @@ export default withPrivate(function MyPage() {
           <UserEditForm />
         </GlobalModal>
       )}
+
+      <div className="absolute top-0 right-0 flex flex-col items-end m-6">
+        <div className="flex items-center justify-end">
+          {!inviteMessageList.length && (
+            <p className="mr-2">아직 아무런 소식이 없네요.</p>
+          )}
+          <i className="text-2xl fa-light fa-bell"></i>
+        </div>
+
+        {inviteMessageList.map((invite) => {
+          return (
+            <div
+              key={invite.id}
+              className="p-2 mt-4 text-black bg-white rounded-md"
+            >
+              <div className="flex items-start justify-start">
+                <ImageOrDefault
+                  width={50}
+                  height={50}
+                  src={invite.thumbnailURL}
+                  alt="thumbnail"
+                  className="rounded-md"
+                />
+                <div className="ml-2 text-sm">
+                  <div>[{invite.name}]에서 당신을 초대하였습니다!</div>
+                  <div className="flex items-center justify-between mt-1">
+                    <button
+                      className="w-1/2 mr-2 text-blue-600 border border-blue-500 rounded-md"
+                      onClick={() => join(invite)}
+                    >
+                      수락
+                    </button>
+                    <button
+                      className="w-1/2 text-red-600 border border-red-500 rounded-md"
+                      onClick={() => join(invite, false)}
+                    >
+                      거절
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          );
+        })}
+      </div>
     </div>
   );
 });

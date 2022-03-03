@@ -6,7 +6,6 @@ import { auth, db, storage } from "src/util/firebase";
 import { useGlobalModal, useLoading } from ".";
 import { v4 } from "uuid";
 import axios from "axios";
-import { useRouter } from "next/router";
 
 const credentialUserState = atom({
   key: "credentialUserState",
@@ -18,11 +17,10 @@ export default function useUser() {
   const { loadingOn, loadingOff } = useLoading();
   const [credentialCheck, setcredentialCheck] = useState(false);
   const { closeModal } = useGlobalModal();
-  const Router = useRouter();
+  const [inviteMessageList, setInviteMessageList] = useState([]);
 
-  /**@로그인상태감지_리스너 */
+  // ? 로그인 상태감지 리스터
   const onFirebaseAuthStateChanged = () => {
-    /**@리스너종료함수반환 */
     return auth.onAuthStateChanged(async (user) => {
       if (user) {
         const userRef = await db.collection("users").doc(user.uid).get();
@@ -45,14 +43,32 @@ export default function useUser() {
     });
   };
 
-  /**@파이어스토어_유저저장 */
+  // ? 초대 감지 리스너
+  const setInviteStream = () => {
+    return db
+      .collection("users")
+      .doc(user.id)
+      .collection("invites")
+      .onSnapshot((snapshot) => {
+        const list = [];
+        snapshot.docs.forEach((invite) => {
+          list.push({
+            id: invite.id,
+            ...invite.data(),
+          });
+        });
+        console.debug("초대리스트 저장 전-----------------");
+        console.debug(list);
+        setInviteMessageList(list);
+      });
+  };
+
+  // ? 회원 정보 저장
   const storeUser = async ({ user }) => {
     const userObj = {
       id: user.uid,
       email: user.email,
       nickname: "투두",
-      level: 1,
-      exp: 0,
       phoneNumber: "",
       profileURL: "",
     };
@@ -60,7 +76,7 @@ export default function useUser() {
     setUser(userObj);
   };
 
-  /**@파이어베이스_회원가입 */
+  // ? 회원가입
   const signUpByFirebase = async (form) => {
     console.debug(form);
     loadingOn();
@@ -73,7 +89,7 @@ export default function useUser() {
     loadingOff();
   };
 
-  /**@파이어베이스_로그인 */
+  // ? 로그인
   const signInByFirebase = async (form) => {
     console.debug(form);
     loadingOn();
@@ -86,7 +102,7 @@ export default function useUser() {
     loadingOff();
   };
 
-  /**@회원_정보_수정 */
+  // ? 회원정보 수정
   const edit = async (form, file) => {
     loadingOn();
 
@@ -132,12 +148,12 @@ export default function useUser() {
     closeModal();
   };
 
-  /**@파이어베이스_로그아웃 */
+  // ? 로그아웃
   const signOutByFirebase = async () => {
     auth.signOut();
   };
 
-  /**@회원_탈퇴 */
+  // ? 회원탈퇴
   const destroy = async () => {
     const result = window.prompt(
       `탈퇴하려면 회원 ID '${user.id}'를 입력해주세요.`
@@ -173,5 +189,7 @@ export default function useUser() {
     signUpByFirebase,
     signInByFirebase,
     signOutByFirebase,
+    inviteMessageList,
+    setInviteStream,
   };
 }

@@ -26,7 +26,9 @@ export default function GlobalModal({ children }) {
           <button onClick={closeModal}>닫기</button>
         </div>
         {/** @모달_메인 */}
-        <div className="p-2">{children}</div>
+        <div className="p-2 max-h-[700px] overflow-y-auto custom-scroll">
+          {children}
+        </div>
         {/** @모달_하단디자인 */}
         <div className={`w-full border-2 ${borderStyles}`}></div>
       </div>
