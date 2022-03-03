@@ -50,7 +50,7 @@ export default withPrivate(function MyPage() {
                 as={`/worlds/${world?.id}/home`}
                 key={world?.id}
               >
-                <a className="relative flex flex-col items-center mr-4">
+                <a className="relative flex flex-col items-center mx-4">
                   <ImageOrDefault
                     src={world?.thumbnailURL}
                     alt="image"
