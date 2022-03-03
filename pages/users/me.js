@@ -116,9 +116,9 @@ export default withPrivate(function MyPage() {
 
       <div className="absolute top-0 right-0 flex flex-col items-end m-6">
         <div className="flex items-center justify-end">
-          {!inviteMessageList.length && (
+          {/* {!inviteMessageList.length && (
             <p className="mr-2">아직 아무런 소식이 없네요.</p>
-          )}
+          )} */}
           <i className="text-2xl fa-light fa-bell"></i>
         </div>
 
