@@ -5,7 +5,7 @@ import useLoading from "./useLoading";
 import useWorld from "./useWorld";
 import useImage from "./useImage";
 import useImageCrop from "./useImageCrop";
-import useSchejule from "./useSchejule";
+import useSchedule from "./useSchedule";
 
 export {
   useTheme,
@@ -15,5 +15,5 @@ export {
   useWorld,
   useImage,
   useImageCrop,
-  useSchejule,
+  useSchedule,
 };

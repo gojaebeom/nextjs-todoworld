@@ -16,7 +16,7 @@ const scheduleObj = {
   end: dateToString(addDays(new Date(), 1)),
 };
 
-export default function useSchejule() {
+export default function useSchedule() {
   const [scheduleList, setScheduleList] = useRecoilState(scheduleListState);
   const { worldDetail } = useWorld();
   const { loadingOff, loadingOn } = useLoading();

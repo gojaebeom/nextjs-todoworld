@@ -2,15 +2,15 @@
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { ThemeArea, ThemeButton } from "src/components";
-import { useSchejule, useTheme } from "src/hooks";
+import { useSchedule, useTheme } from "src/hooks";
 
 import { DateRange } from "react-date-range";
 import ko from "date-fns/locale/ko";
 import "react-date-range/dist/styles.css"; // main style file
 import "react-date-range/dist/theme/default.css";
 
-export default function SchejuleForm() {
-  const { store } = useSchejule();
+export default function ScheduleForm() {
+  const { store } = useSchedule();
   const {
     register,
     handleSubmit,
@@ -62,7 +62,7 @@ export default function SchejuleForm() {
         ranges={dates}
         months={1}
         color={themeColor}
-        rangeColors={themeColor}
+        rangeColors={[themeColor]}
         // direction="horizontal"
         locale={ko}
       />

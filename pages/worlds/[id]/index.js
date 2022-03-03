@@ -1,35 +1,32 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import Image from "next/image";
 import Link from "next/link";
 import {
   useGlobalModal,
-  useSchejule,
+  useSchedule,
   useTheme,
   useUser,
   useWorld,
 } from "src/hooks";
 import { useRouter } from "next/router";
-import defaultImg from "src/assets/images/default_avatar.svg";
 import { ImageOrDefault } from "src/components";
 import { useEffect } from "react";
-import { GlobalModal } from ".";
-import SchejuleForm from "./SchejuleForm";
+import { GlobalModal } from "src/containers";
+import { ScheduleRoom, ScheduleForm } from "src/containers";
+import { withPrivate } from "src/hoc";
 
-export default function WorldContainer({ children }) {
+export default withPrivate(function WorldPage() {
   const { user } = useUser();
   const { theme, getMatchedThemeData } = useTheme();
   const { particleColor, themeColor } = getMatchedThemeData();
   const { openModal, drawTypeMatchedModal } = useGlobalModal();
   const { worldDetail, isValidWorldByWid } = useWorld();
-  const { setScheduleListStream } = useSchejule();
+  const { setScheduleListStream } = useSchedule();
 
   // ? URL 파싱
-  const { pathname, asPath } = useRouter();
-  const idInString = asPath.split("worlds/")[1];
-  const id = idInString.split("/")[0];
+  const { query } = useRouter();
 
   // ? 월드 입장시 유효한 월드인지 판단, 월드 디테일 값 저장
-  useEffect(() => isValidWorldByWid(id), []);
+  useEffect(() => isValidWorldByWid(query.id), []);
 
   // ? 월드 입장시 월드의 스케줄리스트 저장
   useEffect(() => {
@@ -62,7 +59,7 @@ export default function WorldContainer({ children }) {
               backgroundColor: particleColor,
               color: themeColor,
             }}
-            onClick={() => openModal("SCHEJULE_FORM", "일정 작성")}
+            onClick={() => openModal("SCHEDULE_FORM", "일정 작성")}
           >
             Create Schejule
           </button>
@@ -70,58 +67,70 @@ export default function WorldContainer({ children }) {
 
         <nav className="flex flex-col items-start justify-center w-full mt-10 text-lg text-white font-apple-r">
           {/** @NAV_ITEM  */}
-          <Link href="/worlds/[id]/home" as={`/worlds/${id}/home`}>
+          <Link
+            href="/worlds/[id]?room=home"
+            as={`/worlds/${query.id}?room=home`}
+          >
             <a className="relative z-10 flex items-center justify-start w-full">
               <div
                 className={`flex items-center justify-between px-10 py-1 rounded-r-full 
-            ${pathname === "/worlds/[id]/home" && "text-black bg-white"}`}
+            ${query.room === "home" && "text-black bg-white"}`}
               >
                 <i className="mr-2 fa-light fa-house-chimney"></i>
                 <p>Home</p>
               </div>
-              {pathname === "/worlds/[id]/home" && (
+              {query.room === "home" && (
                 <div className="absolute -right-5 w-[30px] h-[30px] bg-white rotate-45"></div>
               )}
             </a>
           </Link>
-          <Link href="/worlds/[id]/schejules" as={`/worlds/${id}/schejules`}>
+          <Link
+            href="/worlds/[id]?room=schedules"
+            as={`/worlds/${query.id}?room=schedules`}
+          >
             <a className="relative z-10 flex items-center justify-start w-full mt-4">
               <div
                 className={`flex items-center justify-between px-10 py-1 rounded-r-full 
-            ${pathname === "/worlds/[id]/schejules" && "text-black bg-white"}`}
+            ${query.room === "schedules" && "text-black bg-white"}`}
               >
                 <i className="mr-2 fa-light fa-calendar-check"></i>
-                <p>Schejules</p>
+                <p>Schedules</p>
               </div>
-              {pathname === "/worlds/[id]/schejules" && (
+              {query.room === "schedules" && (
                 <div className="absolute -right-5 w-[30px] h-[30px] bg-white rotate-45"></div>
               )}
             </a>
           </Link>
-          <Link href="/worlds/[id]/members" as={`/worlds/${id}/members`}>
+          <Link
+            href="/worlds/[id]?room=members"
+            as={`/worlds/${query.id}?room=members`}
+          >
             <a className="relative z-10 flex items-center justify-start w-full mt-4">
               <div
                 className={`flex items-center justify-between px-10 py-1 rounded-r-full 
-            ${pathname === "/worlds/[id]/members" && "text-black bg-white"}`}
+            ${query.room === "members" && "text-black bg-white"}`}
               >
                 <i className="mr-2 fa-light fa-user"></i>
                 <p>Members</p>
               </div>
-              {pathname === "/worlds/[id]/members" && (
+              {query.room === "members" && (
                 <div className="absolute -right-5 w-[30px] h-[30px] bg-white rotate-45"></div>
               )}
             </a>
           </Link>
-          <Link href="/worlds/[id]/settings" as={`/worlds/${id}/settings`}>
+          <Link
+            href="/worlds/[id]?room=settings"
+            as={`/worlds/${query.id}?room=settings`}
+          >
             <a className="relative z-10 flex items-center justify-start w-full mt-4">
               <div
                 className={`flex items-center justify-between px-10 py-1 rounded-r-full 
-            ${pathname === "/worlds/[id]/settings" && "text-black bg-white"}`}
+            ${query.room === "settings" && "text-black bg-white"}`}
               >
                 <i className="mr-2 fa-light fa-screwdriver-wrench"></i>
                 <p>Settings</p>
               </div>
-              {pathname === "/worlds/[id]/settings" && (
+              {query.room === "settings" && (
                 <div className="absolute -right-5 w-[30px] h-[30px] bg-white rotate-45"></div>
               )}
             </a>
@@ -146,16 +155,16 @@ export default function WorldContainer({ children }) {
           className={`w-full h-full overflow-hidden text-black bg-white flex
         ${!theme.roomSizeUp && "rounded-md"}`}
         >
-          {children}
+          {query.room === "schedules" && <ScheduleRoom />}
         </main>
       </div>
       {/** @글로벌모달_유저수정타입 */}
       {drawTypeMatchedModal(
-        "SCHEJULE_FORM",
+        "SCHEDULE_FORM",
         <GlobalModal>
-          <SchejuleForm />
+          <ScheduleForm />
         </GlobalModal>
       )}
     </>
   );
-}
+});

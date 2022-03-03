@@ -46,8 +46,8 @@ export default withPrivate(function MyPage() {
           {worldList.map((world) => {
             return (
               <Link
-                href="/worlds/[id]/home"
-                as={`/worlds/${world?.id}/home`}
+                href="/worlds/[id]?room=home"
+                as={`/worlds/${world?.id}?room=home`}
                 key={world?.id}
               >
                 <a className="relative flex flex-col items-center mx-4">

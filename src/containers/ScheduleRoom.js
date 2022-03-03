@@ -1,18 +1,15 @@
-import { WorldContainer } from "src/containers";
-import { withPrivate } from "src/hoc";
-
 import FullCalendar from "@fullcalendar/react";
 import dayGridPlugin from "@fullcalendar/daygrid"; // a plugin!
 import interactionPlugin from "@fullcalendar/interaction"; // needed for dayClick
-import { useSchejule, useTheme } from "src/hooks";
+import { useSchedule, useTheme } from "src/hooks";
 
-export default withPrivate(function WorldSchejulePage() {
-  const { scheduleList } = useSchejule();
+export default function ScheduleRoom() {
+  const { scheduleList } = useSchedule();
   const { getMatchedThemeData } = useTheme();
   const { themeColor } = getMatchedThemeData();
 
   return (
-    <WorldContainer>
+    <>
       <div className="w-full h-full p-6">
         <FullCalendar
           eventClassNames="text-red-500"
@@ -56,6 +53,6 @@ export default withPrivate(function WorldSchejulePage() {
         />
       </div>
       <div className="w-[400px] h-full bg-gray-50"></div>
-    </WorldContainer>
+    </>
   );
-});
+}
