@@ -41,8 +41,6 @@ export default withPrivate(function WorldPage() {
     }
   }, [worldDetail]);
 
-  const [exp, setExp] = useState(0);
-
   return (
     <>
       <aside className="w-[300px] min-w-[300px] h-full z-20">
@@ -50,7 +48,7 @@ export default withPrivate(function WorldPage() {
           {worldDetail?.name}
         </figure>
         <div className="flex flex-col items-center justify-center mt-10 text-white">
-          <div className="relative flex items-center justify-center w-[90px] h-[90px] overflow-hidden rounded-full ">
+          <div className="flex items-center justify-center bg-white border-4 border-white rounded-full">
             <ImageOrDefault
               className="z-10 rounded-full"
               src={user?.profileURL}
@@ -58,18 +56,13 @@ export default withPrivate(function WorldPage() {
               width={80}
               height={80}
             />
-            <div
-              className="absolute bottom-0 left-0 w-full transition-all delay-75 rounded-3xl"
-              style={{ backgroundColor: "white", height: exp + "%" }}
-            ></div>
           </div>
-          <button onClick={() => setExp(exp + 30)}>경험치 증가</button>
           <p className="mt-1">{user?.nickname}</p>
         </div>
 
         <div className="flex items-center justify-center w-full px-6 mt-6">
           <button
-            className="w-full px-4 py-2 text-black bg-white rounded-md"
+            className="w-full px-4 py-2 pt-3 text-black bg-white rounded-md"
             onClick={() => openModal("SCHEDULE_FORM", "일정 작성")}
           >
             일정 작성하기
@@ -89,7 +82,7 @@ export default withPrivate(function WorldPage() {
             ${query.room === "home" && "text-black bg-white"}`}
               >
                 <i className="mr-2 fa-light fa-house-chimney"></i>
-                <p>Home</p>
+                <p className="pt-1.5">Home</p>
               </div>
               {query.room === "home" && (
                 <div className="absolute -right-5 w-[30px] h-[30px] bg-white rotate-45"></div>
@@ -102,11 +95,11 @@ export default withPrivate(function WorldPage() {
           >
             <a className="relative z-10 flex items-center justify-start w-full mt-4">
               <div
-                className={`flex items-center justify-between px-10 py-1 rounded-r-full 
+                className={`flex items-center justify-between px-10 py-1  rounded-r-full 
             ${query.room === "schedules" && "text-black bg-white"}`}
               >
                 <i className="mr-2 fa-light fa-calendar-check"></i>
-                <p>Schedules</p>
+                <p className="pt-1.5">Schedules</p>
               </div>
               {query.room === "schedules" && (
                 <div className="absolute -right-5 w-[30px] h-[30px] bg-white rotate-45"></div>
@@ -123,7 +116,7 @@ export default withPrivate(function WorldPage() {
             ${query.room === "members" && "text-black bg-gray-100"}`}
               >
                 <i className="mr-2 fa-light fa-user"></i>
-                <p>Members</p>
+                <p className="pt-1.5">Members</p>
               </div>
               {query.room === "members" && (
                 <div className="absolute -right-5 w-[30px] h-[30px] bg-gray-100 rotate-45"></div>
@@ -140,7 +133,7 @@ export default withPrivate(function WorldPage() {
             ${query.room === "settings" && "text-black bg-white"}`}
               >
                 <i className="mr-2 fa-light fa-screwdriver-wrench"></i>
-                <p>Settings</p>
+                <p className="pt-1.5">Settings</p>
               </div>
               {query.room === "settings" && (
                 <div className="absolute -right-5 w-[30px] h-[30px] bg-white rotate-45"></div>
@@ -153,7 +146,7 @@ export default withPrivate(function WorldPage() {
                 className={`flex items-center justify-between px-10 py-1 rounded-r-full `}
               >
                 <i className="mr-1 fa-light fa-id-card-clip"></i>
-                <p>My Profile</p>
+                <p className="pt-1.5">My Profile</p>
               </div>
             </a>
           </Link>

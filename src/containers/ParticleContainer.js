@@ -5,17 +5,16 @@ import { catchHandler } from "src/util/catchHandler";
 /* eslint-disable react-hooks/exhaustive-deps */
 export default function ParticleContainer() {
   const { theme, getMatchedThemeData } = useTheme();
-  const { particleColor } = getMatchedThemeData();
+  const { lightColor } = getMatchedThemeData();
 
   useEffect(() => {
     if (document.getElementById("particles-js")) {
       import("src/lib/particles.min.js")
         .then(() => {
-          document.getElementById("particles-js") &&
-            particlesPlay(particleColor);
+          document.getElementById("particles-js") && particlesPlay(lightColor);
         })
         .catch((error) => {
-          catchHandler("파티클 라이브러리를 불러오는데 실패하였습니다.");
+          // catchHandler("파티클 라이브러리를 불러오는데 실패하였습니다.");
         });
     }
   }, [theme]);
@@ -51,7 +50,7 @@ export default function ParticleContainer() {
           width: 19.882309554732483,
         },
         move: {
-          enable: theme.effect,
+          enable: true,
           speed: 3.206824121731046,
           direction: "top",
           random: false,

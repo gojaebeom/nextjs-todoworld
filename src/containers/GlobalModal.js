@@ -6,7 +6,7 @@ export default function GlobalModal({ children }) {
   const { borderStyles } = getMatchedThemeData();
   return (
     <div
-      className={`fixed top-0 left-0 z-50 flex items-center justify-center w-full h-full bg-black/50
+      className={`fixed top-0 left-0 z-50 flex items-center justify-center w-full h-full bg-white/80
       ${modal.backgroundClick && "cursor-pointer"}`}
       onClick={() => {
         modal.backgroundClick && closeModal();
@@ -14,8 +14,9 @@ export default function GlobalModal({ children }) {
     >
       {/** @모달_박스 */}
       <div
-        className={`min-w-[350px]  pb-0 flex flex-col bg-white text-black overflow-hidden shadow-lg transition-all duration-200 cursor-default
-        ${theme.rounded && "rounded-lg"}`}
+        className={`min-w-[350px]  pb-0 flex flex-col bg-white text-black 
+        overflow-hidden shadow-lg transition-all duration-200 cursor-default
+        rounded-lg border`}
         onClick={(e) => {
           e.stopPropagation();
         }}

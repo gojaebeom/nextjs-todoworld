@@ -28,13 +28,13 @@ export default withPrivate(function MyPage() {
   return (
     <div className="z-10 flex flex-col items-center justify-center w-full text-white">
       <div className="flex flex-col items-center justify-center mb-10">
-        <div className="flex items-center justify-center bg-white border-2 border-white rounded-full">
+        <div className="flex items-center justify-center bg-white border-4 border-white rounded-full">
           <ImageOrDefault
             src={user?.profileURL}
             width={80}
             height={80}
             alt="image"
-            className="w-20 h-20 border-2 border-white rounded-full"
+            className="w-20 h-20 rounded-full"
           />
         </div>
 
@@ -42,14 +42,14 @@ export default withPrivate(function MyPage() {
         <p className="text-xs">{user?.id}</p>
         <div className="flex items-center justify-center mt-4">
           <button
-            className="flex items-center p-2 px-4 mx-2 border"
+            className="flex items-center p-2 px-4 pt-3 mx-2 border"
             onClick={() => openModal("USER_EDIT", "회원정보 변경")}
           >
             프로필 수정
             <i className="ml-2 fa-light fa-pencil"></i>
           </button>
           <button
-            className="flex items-center p-2 px-4 mx-2 border"
+            className="flex items-center p-2 px-4 pt-3 mx-2 border"
             onClick={signOutByFirebase}
           >
             로그아웃
@@ -58,7 +58,7 @@ export default withPrivate(function MyPage() {
         </div>
       </div>
       <div className="flex flex-col items-center">
-        <p className="mb-4 text-3xl font-noto-b">
+        <p className="mb-4 text-3xl font-apple-h">
           참가할 투두월드를 선택하세요.
         </p>
         <div className="flex items-center justify-center">
@@ -77,7 +77,7 @@ export default withPrivate(function MyPage() {
                     height={100}
                   />
                   <div className="absolute flex flex-col items-center justify-center w-full h-full text-sm transition-all hover:bg-black/50">
-                    <p>{world?.name}</p>
+                    <p className="pt-1">{world?.name}</p>
                     {/* <p className="text-xs">맴버 : {world?.members.length}명</p>
                   <p className="text-xs">일정 : {world?.schejules.length}개</p> */}
                   </div>

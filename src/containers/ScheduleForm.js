@@ -25,7 +25,7 @@ export default function ScheduleForm() {
   ]);
 
   const { getMatchedThemeData } = useTheme();
-  const { themeColor } = getMatchedThemeData();
+  const { type } = getMatchedThemeData();
 
   return (
     <form
@@ -61,8 +61,8 @@ export default function ScheduleForm() {
         moveRangeOnFirstSelection={false}
         ranges={dates}
         months={1}
-        color={themeColor}
-        rangeColors={[themeColor]}
+        color={type}
+        rangeColors={[type]}
         // direction="horizontal"
         locale={ko}
       />

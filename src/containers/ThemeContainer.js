@@ -11,15 +11,16 @@ export default function ThemeContainer({ children }) {
     toggleThemeRounded,
     getMatchedThemeData,
   } = useTheme();
-  const { themeColor } = getMatchedThemeData();
+  const { type, textColor } = getMatchedThemeData();
   const { openModal, drawTypeMatchedModal } = useGlobalModal();
   const { isLoading } = useLoading();
 
   return (
     <div
-      className="fixed top-0 left-0 flex w-full h-screen transition-all duration-200 font-noto-r"
+      className="fixed top-0 left-0 flex w-full h-screen transition-all duration-200 font-apple-r"
       style={{
-        backgroundColor: themeColor,
+        backgroundColor: type,
+        color: textColor,
       }}
     >
       {children}
@@ -33,7 +34,7 @@ export default function ThemeContainer({ children }) {
         <i className="text-4xl fa-light fa-palette"></i>
       </button>
       {/** @파티클효과 */}
-      <ParticleContainer />
+      {theme.effect && <ParticleContainer />}
 
       {/** @로딩화면 */}
       {isLoading && (
@@ -55,24 +56,68 @@ export default function ThemeContainer({ children }) {
             <p className="text-xs">테마 색상</p>
             <div>
               <button
-                className="w-10 h-10 mr-2 bg-blue-500 border-4 border-blue-400 rounded-full cursor-pointer "
-                onClick={() => setThemeType("BLUE")}
+                className="w-10 h-10 mr-2 bg-[#27aae1] border-4 border-[#85C1E9] rounded-full cursor-pointer "
+                onClick={() => setThemeType("#27aae1")}
               ></button>
               <button
-                className="w-10 h-10 mr-2 bg-green-600 border-4 border-green-500 rounded-full cursor-pointer "
-                onClick={() => setThemeType("GREEN")}
+                className="w-10 h-10 mr-2 bg-[#ef404a] border-4 border-[#ed7279] rounded-full cursor-pointer "
+                onClick={() => setThemeType("#ef404a")}
               ></button>
               <button
-                className="w-10 h-10 mr-2 bg-red-400 border-4 border-red-300 rounded-full cursor-pointer "
-                onClick={() => setThemeType("PINK")}
+                className="w-10 h-10 mr-2 bg-[#f2728c] border-4 border-[#f09eaf] rounded-full cursor-pointer "
+                onClick={() => setThemeType("#f2728c")}
               ></button>
               <button
-                className="w-10 h-10 mr-2 bg-[#A569BD] border-4 border-purple-400 rounded-full cursor-pointer "
-                onClick={() => setThemeType("PURPLE")}
+                className="w-10 h-10 mr-2 bg-[#ffd400] border-4 border-[#ffe359] rounded-full cursor-pointer "
+                onClick={() => setThemeType("#ffd400")}
               ></button>
               <button
-                className="w-10 h-10 mr-2 bg-yellow-500 border-4 border-yellow-400 rounded-full cursor-pointer "
-                onClick={() => setThemeType("ORANGE")}
+                className="w-10 h-10 mr-2 border-4 bg-[#80b463] border-[#9dbb8c] rounded-full cursor-pointer "
+                onClick={() => setThemeType("#80b463")}
+              ></button>
+            </div>
+            <div className="mt-1">
+              <button
+                className="w-10 h-10 mr-2 bg-[#4eb8b9] border-4 border-[#7ec4c4] rounded-full cursor-pointer "
+                onClick={() => setThemeType("#4eb8b9")}
+              ></button>
+              <button
+                className="w-10 h-10 mr-2 bg-[#9e7eb9] border-4 border-[#bda3d4] rounded-full cursor-pointer "
+                onClick={() => setThemeType("#9e7eb9")}
+              ></button>
+              <button
+                className="w-10 h-10 mr-2 bg-[#a7a9ac] border-4 border-[#bdbdbd] rounded-full cursor-pointer "
+                onClick={() => setThemeType("#a7a9ac")}
+              ></button>
+              <button
+                className="w-10 h-10 mr-2 border-4 bg-[#f79552] border-[#f0a472] rounded-full cursor-pointer "
+                onClick={() => setThemeType("#f79552")}
+              ></button>
+              <button
+                className="w-10 h-10 mr-2 bg-[#f7c0c7] border-4 border-[#f7ced3] rounded-full cursor-pointer "
+                onClick={() => setThemeType("#f7c0c7")}
+              ></button>
+            </div>
+            <div className="mt-1">
+              <button
+                className="w-10 h-10 mr-2 bg-[#ffcc4e] border-4 border-[#ffd771] rounded-full cursor-pointer "
+                onClick={() => setThemeType("#ffcc4e")}
+              ></button>
+              <button
+                className="w-10 h-10 mr-2 bg-[#d5e05b] border-4 border-[#e8f371] rounded-full cursor-pointer "
+                onClick={() => setThemeType("#d5e05b")}
+              ></button>
+              <button
+                className="w-10 h-10 mr-2 bg-[#81d3eb] border-4 border-[#91e1fa] rounded-full cursor-pointer "
+                onClick={() => setThemeType("#81d3eb")}
+              ></button>
+              <button
+                className="w-10 h-10 mr-2 border-4 bg-[#b0dfdb] border-[#beebe7] rounded-full cursor-pointer "
+                onClick={() => setThemeType("#b0dfdb")}
+              ></button>
+              <button
+                className="w-10 h-10 mr-2 bg-[#bbb8dc] border-4 border-[#cccaeb] rounded-full cursor-pointer "
+                onClick={() => setThemeType("#bbb8dc")}
               ></button>
             </div>
             {/** @테마배경효과_토글 */}
@@ -93,28 +138,6 @@ export default function ThemeContainer({ children }) {
                 />
                 <label
                   htmlFor="checkbox1"
-                  className="block h-6 overflow-hidden bg-gray-300 rounded-full cursor-pointer"
-                ></label>
-              </div>
-            </div>
-            {/** @버튼_입력창_디자인_둥글게 */}
-            <div className="mt-4 mb-4">
-              <p className="text-xs">부드러운 레이아웃 처리</p>
-              <div className="relative inline-block w-10 mr-2 align-middle select-none">
-                <input
-                  type="checkbox"
-                  name="isPrivate"
-                  id="checkbox2"
-                  className={`absolute block w-6 h-6 duration-200 ease-in  border-4 rounded-full outline-none appearance-none cursor-pointer focus:outline-none 
-                            ${
-                              theme.rounded
-                                ? "right-0 bg-blue-400"
-                                : "right-4 bg-white"
-                            }`}
-                  onChange={() => toggleThemeRounded()}
-                />
-                <label
-                  htmlFor="checkbox2"
                   className="block h-6 overflow-hidden bg-gray-300 rounded-full cursor-pointer"
                 ></label>
               </div>

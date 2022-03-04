@@ -6,17 +6,17 @@ export default function ThemeButton({
   clickEvent,
   className = "my-4",
 }) {
-  const { theme, getMatchedThemeData } = useTheme();
-  const { buttonStyles } = getMatchedThemeData();
-  const roundStyle = theme.rounded ? "rounded-md" : "";
+  const { getMatchedThemeData } = useTheme();
+  const { buttonStyles, textColor } = getMatchedThemeData();
 
   return (
     <button
       className={`
-        w-full px-4 py-2 text-center transition duration-100 delay-150 ease-in
-        text-white focus:ring-offset-white focus:outline-none focus:ring-2
-        focus:ring-offset-2 ${buttonStyles} ${roundStyle} ${className}`}
+        w-full px-4 py-2 pt-3 text-center transition duration-100 ease-in
+        focus:ring-offset-white focus:outline-none focus:ring-2 rounded-md
+        focus:ring-offset-2 ${buttonStyles} ${className}`}
       onClick={clickEvent}
+      style={{ color: textColor }}
       type={type}
     >
       {children}

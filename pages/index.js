@@ -13,14 +13,14 @@ export default withPublic(function HomePage() {
 
   const { signInByFirebase } = useUser();
 
-  const { theme, getMatchedThemeData } = useTheme();
-  const { themeColor } = getMatchedThemeData();
+  const { getMatchedThemeData } = useTheme();
+  const { strongColor } = getMatchedThemeData();
 
   return (
     <>
-      <div className="relative z-10 flex flex-col items-end justify-center w-1/2 h-full p-12 text-white">
-        <div className="flex items-center mb-4 text-4xl font-noto-b">
-          TODO WORLD
+      <div className="relative z-10 flex flex-col items-end justify-center w-1/2 h-full p-12">
+        <div className="flex items-center mb-4 text-4xl font-apple-h">
+          <p className="pt-1.5">TODO WORLD</p>
           <i className="ml-2 fa-light fa-earth-asia"></i>
         </div>
         <div className="mb-20 text-lg text-right">
@@ -70,8 +70,8 @@ export default withPublic(function HomePage() {
 
           <div className="text-sm text-gray-600">
             계정이 없나요?&nbsp;
-            <Link as="/signup" href="/signup" className="text-base">
-              <a style={{ color: themeColor }}>회원가입</a>
+            <Link as="/signup" href="/signup" >
+              <a style={{ color: strongColor }} className="text-base font-semibold">회원가입</a>
             </Link>
             에서 먼저 계정을 생성해주세요. 또는 간편하게 카카오톡으로 로그인할
             수 있어요!
@@ -79,10 +79,9 @@ export default withPublic(function HomePage() {
 
           <button
             className={`
-            w-full px-4 py-2 text-center transition duration-200 ease-in  
+            w-full px-4 py-2 pt-3 text-center transition duration-200 ease-in  rounded-lg
             text-black focus:ring-offset-white focus:outline-none focus:ring-2 mt-2
-            focus:ring-offset-2 bg-[#FEE500] hover:bg-[#fecf00] focus:ring-[#FEE500] 
-            ${theme.rounded && "rounded-lg"}`}
+            focus:ring-offset-2 bg-[#FEE500] hover:bg-[#fecf00] focus:ring-[#FEE500] `}
             onClick={() => {
               console.debug(process.env.NEXT_PUBLIC_KAKAO_CLIENT_ID);
               console.debug(process.env.NEXT_PUBLIC_KAKAO_REDIRECT_URL);

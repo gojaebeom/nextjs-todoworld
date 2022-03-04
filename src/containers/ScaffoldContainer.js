@@ -5,7 +5,7 @@ import { ParticleContainer } from ".";
 
 export default function ScaffoldContainer({ children }) {
   const { themeInitialize, getMatchedThemeData } = useTheme();
-  const { themeColor } = getMatchedThemeData();
+  const { type } = getMatchedThemeData();
   const { credentialCheck, onFirebaseAuthStateChanged } = useUser();
 
   /**@테마_초기화 */
@@ -21,7 +21,7 @@ export default function ScaffoldContainer({ children }) {
     <div
       className="fixed w-full h-full"
       style={{
-        backgroundColor: themeColor,
+        backgroundColor: type,
       }}
     >
       <div className="loader">

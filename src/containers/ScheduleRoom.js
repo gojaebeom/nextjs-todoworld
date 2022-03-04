@@ -6,7 +6,7 @@ import { useSchedule, useTheme } from "src/hooks";
 export default function ScheduleRoom() {
   const { scheduleList } = useSchedule();
   const { getMatchedThemeData } = useTheme();
-  const { themeColor, particleColor } = getMatchedThemeData();
+  const { type, particleColor } = getMatchedThemeData();
 
   return (
     <>
@@ -41,8 +41,8 @@ export default function ScheduleRoom() {
             return (
               <div className="bg-white rounded-3xl">
                 <div
-                  className="px-2 overflow-hidden text-black border border-white rounded-3xl"
-                  style={{ backgroundColor: particleColor }}
+                  className="px-2 pt-0.5 overflow-hidden text-white border border-white rounded-3xl"
+                  style={{ backgroundColor: type }}
                 >
                   {title}
                 </div>

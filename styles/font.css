@@ -1,3 +1,24 @@
+@font-face {
+  font-family: "apple-b";
+  src: url("../src/assets/fonts/AppleSDGothicNeoB.ttf");
+}
+@font-face {
+  font-family: "apple-h";
+  src: url("../src/assets/fonts/AppleSDGothicNeoH.ttf");
+}
+@font-face {
+  font-family: "apple-l";
+  src: url("../src/assets/fonts/AppleSDGothicNeoL.ttf");
+}
+@font-face {
+  font-family: "apple-r";
+  src: url("../src/assets/fonts/AppleSDGothicNeoR.ttf");
+}
+@font-face {
+  font-family: "apple-t";
+  src: url("../src/assets/fonts/AppleSDGothicNeoT.ttf");
+}
+
 /** 노토산스 */
 @font-face {
   font-family: "noto-b";
@@ -6,4 +27,17 @@
 @font-face {
   font-family: "noto-r";
   src: url("../src/assets/fonts/NotoSans-Regular.ttf");
+}
+
+.font-apple-l {
+  font-family: "apple-l";
+}
+.font-apple-b {
+  font-family: "apple-b";
+}
+.font-apple-h {
+  font-family: "apple-h";
+}
+.font-apple-r {
+  font-family: "apple-r";
 }

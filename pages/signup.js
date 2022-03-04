@@ -12,13 +12,13 @@ export default withPublic(function SignUpPage() {
   } = useForm();
   const { signUpByFirebase } = useUser();
   const { getMatchedThemeData } = useTheme();
-  const { themeColor } = getMatchedThemeData();
+  const { strongColor } = getMatchedThemeData();
 
   return (
     <>
       <div className="z-10 flex flex-col items-end justify-center w-1/2 h-full p-12 text-white">
-        <div className="flex items-center mb-4 text-4xl font-noto-b">
-          TODO WORLD
+        <div className="flex items-center mb-4 text-4xl font-apple-h">
+          <p className="pt-1.5">TODO WORLD</p>
           <i className="ml-2 fa-light fa-earth-asia"></i>
         </div>
         <div className="mb-20 text-lg text-right">
@@ -68,8 +68,13 @@ export default withPublic(function SignUpPage() {
 
           <div className="text-sm text-gray-600">
             이미 계정이 있나요?&nbsp;
-            <Link href="/" className="text-base">
-              <a style={{ color: themeColor }}>로그인</a>
+            <Link href="/">
+              <a
+                style={{ color: strongColor }}
+                className="text-base font-semibold"
+              >
+                로그인
+              </a>
             </Link>
             에서 바로 로그인하세요!
           </div>

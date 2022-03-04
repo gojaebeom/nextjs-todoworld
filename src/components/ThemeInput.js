@@ -9,16 +9,15 @@ export default function ThemeInput({
   value = "",
   errors,
 }) {
-  const { theme, getMatchedThemeData } = useTheme();
+  const { getMatchedThemeData } = useTheme();
   const { inputStyles } = getMatchedThemeData();
-  const roundStyle = theme.rounded ? "rounded-md" : "";
 
   return (
     <label className="flex flex-col mb-2 text-gray-500">
       <span className="text-xs mb-0.5">{label}</span>
       <input
         {...reactHookFormObj}
-        className={`w-full p-2 text-base border  focus:outline-none focus:border-transparent focus:ring-2 ${inputStyles} ${roundStyle}`}
+        className={`w-full p-2 pt-3 text-base border  focus:outline-none focus:border-transparent focus:ring-2 rounded-md ${inputStyles}`}
         placeholder={placeholder}
         type={type}
         defaultValue={value}

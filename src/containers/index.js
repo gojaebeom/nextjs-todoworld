@@ -8,6 +8,7 @@ import ScheduleRoom from "./ScheduleRoom";
 import ScheduleForm from "./ScheduleForm";
 import MemberRoom from "./MemberRoom";
 import MemberInviteForm from "./MemberInviteForm";
+import MemberGroupForm from "./MemberGroupForm";
 
 export {
   ThemeContainer,
@@ -20,4 +21,5 @@ export {
   ScheduleRoom,
   MemberRoom,
   MemberInviteForm,
+  MemberGroupForm,
 };
