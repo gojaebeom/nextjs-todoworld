@@ -9,9 +9,8 @@ import {
 } from "src/hooks";
 import { useRouter } from "next/router";
 import { ImageOrDefault } from "src/components";
-import { useEffect, useState } from "react";
-import { GlobalModal, MemberRoom } from "src/containers";
-import { ScheduleRoom, ScheduleForm } from "src/containers";
+import { useEffect } from "react";
+import { GlobalModal, WorldMemberRoom, WorldScheduleRoom, WorldScheduleForm } from "src/containers";
 import { withPrivate } from "src/hoc";
 
 export default withPrivate(function WorldPage() {
@@ -90,23 +89,6 @@ export default withPrivate(function WorldPage() {
             </a>
           </Link>
           <Link
-            href="/worlds/[id]?room=schedules"
-            as={`/worlds/${query.id}?room=schedules`}
-          >
-            <a className="relative z-10 flex items-center justify-start w-full mt-4">
-              <div
-                className={`flex items-center justify-between px-10 py-1  rounded-r-full 
-            ${query.room === "schedules" && "text-black bg-white"}`}
-              >
-                <i className="mr-2 fa-light fa-calendar-check"></i>
-                <p className="pt-0.5">Schedules</p>
-              </div>
-              {query.room === "schedules" && (
-                <div className="absolute -right-5 w-[30px] h-[30px] bg-white rotate-45"></div>
-              )}
-            </a>
-          </Link>
-          <Link
             href="/worlds/[id]?room=members"
             as={`/worlds/${query.id}?room=members`}
           >
@@ -160,15 +142,15 @@ export default withPrivate(function WorldPage() {
           className={`w-full h-full overflow-hidden text-black bg-white flex
         ${!theme.roomSizeUp && "rounded-md"}`}
         >
-          {query.room === "schedules" && <ScheduleRoom />}
-          {query.room === "members" && <MemberRoom />}
+          {query.room === "home" && <WorldScheduleRoom />}
+          {query.room === "members" && <WorldMemberRoom />}
         </main>
       </div>
       {/** @글로벌모달_유저수정타입 */}
       {drawTypeMatchedModal(
         "SCHEDULE_FORM",
         <GlobalModal>
-          <ScheduleForm />
+          <WorldScheduleForm />
         </GlobalModal>
       )}
     </>

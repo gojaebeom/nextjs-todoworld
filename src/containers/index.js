@@ -2,13 +2,13 @@ import ThemeContainer from "./ThemeContainer";
 import ParticleContainer from "./ParticleContainer";
 import ScaffoldContainer from "./ScaffoldContainer";
 import GlobalModal from "./GlobalModal";
-import WorldStoreForm from "./WorldStoreForm";
 import UserEditForm from "./UserEditForm";
-import ScheduleRoom from "./ScheduleRoom";
-import ScheduleForm from "./ScheduleForm";
-import MemberRoom from "./MemberRoom";
-import MemberInviteForm from "./MemberInviteForm";
-import MemberGroupForm from "./MemberGroupForm";
+import WorldStoreForm from "./WorldStoreForm";
+import WorldScheduleForm from "./WorldScheduleForm";
+import WorldMemberInviteForm from "./WorldMemberInviteForm";
+import WorldMemberGroupForm from "./WorldMemberGroupForm";
+import WorldScheduleRoom from "./WorldScheduleRoom";
+import WorldMemberRoom from "./WorldMemberRoom";
 
 export {
   ThemeContainer,
@@ -17,9 +17,9 @@ export {
   GlobalModal,
   WorldStoreForm,
   UserEditForm,
-  ScheduleForm,
-  ScheduleRoom,
-  MemberRoom,
-  MemberInviteForm,
-  MemberGroupForm,
+  WorldScheduleForm,
+  WorldScheduleRoom,
+  WorldMemberRoom,
+  WorldMemberInviteForm,
+  WorldMemberGroupForm,
 };
