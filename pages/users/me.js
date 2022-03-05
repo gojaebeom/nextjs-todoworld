@@ -42,14 +42,14 @@ export default withPrivate(function MyPage() {
         <p className="text-xs">{user?.id}</p>
         <div className="flex items-center justify-center mt-4">
           <button
-            className="flex items-center p-2 px-4 pt-3 mx-2 border"
+            className="flex items-center p-2 px-4 mx-2 border"
             onClick={() => openModal("USER_EDIT", "회원정보 변경")}
           >
             프로필 수정
             <i className="ml-2 fa-light fa-pencil"></i>
           </button>
           <button
-            className="flex items-center p-2 px-4 pt-3 mx-2 border"
+            className="flex items-center p-2 px-4 mx-2 border"
             onClick={signOutByFirebase}
           >
             로그아웃
@@ -58,7 +58,7 @@ export default withPrivate(function MyPage() {
         </div>
       </div>
       <div className="flex flex-col items-center">
-        <p className="mb-4 text-3xl font-apple-h">
+        <p className="mb-4 text-3xl font-pre-bb">
           참가할 투두월드를 선택하세요.
         </p>
         <div className="flex items-center justify-center">

@@ -17,7 +17,7 @@ export default function ThemeContainer({ children }) {
 
   return (
     <div
-      className="fixed top-0 left-0 flex w-full h-screen transition-all duration-200 font-apple-r"
+      className="fixed top-0 left-0 flex w-full h-screen transition-all duration-200 font-pre-l"
       style={{
         backgroundColor: type,
         color: textColor,

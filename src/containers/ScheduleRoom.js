@@ -41,7 +41,7 @@ export default function ScheduleRoom() {
             return (
               <div className="bg-white rounded-3xl">
                 <div
-                  className="px-2 pt-0.5 overflow-hidden text-white border border-white rounded-3xl"
+                  className="px-2 overflow-hidden text-white border border-white rounded-3xl"
                   style={{ backgroundColor: type }}
                 >
                   {title}

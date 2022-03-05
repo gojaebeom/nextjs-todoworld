@@ -4,11 +4,11 @@ import { RecoilRoot } from "recoil";
 import DebugObserver from "src/components/DebugObserver";
 
 import "styles/globals.css";
-import "styles/font.css";
 import "styles/loading.css";
 import "styles/calendar.css";
 import "styles/scroll.css";
 import "styles/custom-daterange.css";
+import "styles/font.css";
 
 function MyApp({ Component, pageProps }) {
   return (

@@ -12,7 +12,7 @@ export default function ThemeButton({
   return (
     <button
       className={`
-        w-full px-4 py-2 pt-3 text-center transition duration-100 ease-in
+        w-full px-4 py-2 text-center transition duration-100 ease-in
         focus:ring-offset-white focus:outline-none focus:ring-2 rounded-md
         focus:ring-offset-2 ${buttonStyles} ${className}`}
       onClick={clickEvent}

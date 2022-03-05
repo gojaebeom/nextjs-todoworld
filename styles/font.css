@@ -1,43 +1,64 @@
 @font-face {
-  font-family: "apple-b";
-  src: url("../src/assets/fonts/AppleSDGothicNeoB.ttf");
+  font-family: "pre-bb";
+  src: url("../src/assets/fonts/Pretendard-Black.otf");
 }
 @font-face {
-  font-family: "apple-h";
-  src: url("../src/assets/fonts/AppleSDGothicNeoH.ttf");
+  font-family: "pre-eb";
+  src: url("../src/assets/fonts/Pretendard-ExtraBold.otf");
 }
 @font-face {
-  font-family: "apple-l";
-  src: url("../src/assets/fonts/AppleSDGothicNeoL.ttf");
+  font-family: "pre-b";
+  src: url("../src/assets/fonts/Pretendard-Bold.otf");
 }
 @font-face {
-  font-family: "apple-r";
-  src: url("../src/assets/fonts/AppleSDGothicNeoR.ttf");
+  font-family: "pre-sb";
+  src: url("../src/assets/fonts/Pretendard-SemiBold.otf");
 }
 @font-face {
-  font-family: "apple-t";
-  src: url("../src/assets/fonts/AppleSDGothicNeoT.ttf");
+  font-family: "pre-m";
+  src: url("../src/assets/fonts/Pretendard-Medium.otf");
+}
+@font-face {
+  font-family: "pre-r";
+  src: url("../src/assets/fonts/Pretendard-Regular.otf");
+}
+@font-face {
+  font-family: "pre-el";
+  src: url("../src/assets/fonts/Pretendard-ExtraLight.otf");
+}
+@font-face {
+  font-family: "pre-l";
+  src: url("../src/assets/fonts/Pretendard-Light.otf");
+}
+@font-face {
+  font-family: "pre-t";
+  src: url("../src/assets/fonts/Pretendard-Thin.otf");
 }
 
-/** 노토산스 */
-@font-face {
-  font-family: "noto-b";
-  src: url("../src/assets/fonts/NotoSans-Bold.ttf");
+.font-pre-bb {
+  font-family: "pre-bb";
 }
-@font-face {
-  font-family: "noto-r";
-  src: url("../src/assets/fonts/NotoSans-Regular.ttf");
+.font-pre-eb {
+  font-family: "pre-eb";
 }
-
-.font-apple-l {
-  font-family: "apple-l";
+.font-pre-b {
+  font-family: "pre-b";
 }
-.font-apple-b {
-  font-family: "apple-b";
+.font-pre-sb {
+  font-family: "pre-sb";
 }
-.font-apple-h {
-  font-family: "apple-h";
+.font-pre-m {
+  font-family: "pre-m";
 }
-.font-apple-r {
-  font-family: "apple-r";
+.font-pre-r {
+  font-family: "pre-r";
+}
+.font-pre-el {
+  font-family: "pre-el";
+}
+.font-pre-l {
+  font-family: "pre-l";
+}
+.font-pre-t {
+  font-family: "pre-t";
 }

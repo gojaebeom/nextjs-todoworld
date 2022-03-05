@@ -3,8 +3,8 @@ module.exports = {
   theme: {
     extend: {
       fontFamily: {
-        "noto-b": ["noto-b"],
-        "noto-r": ["noto-r"],
+        // "pre-b": ["font-pre-b"],
+        // "pre-bb": ["font-pre-bb"],
       },
     },
   },
