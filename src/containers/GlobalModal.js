@@ -2,8 +2,7 @@ import { useGlobalModal, useTheme } from "src/hooks";
 
 export default function GlobalModal({ children }) {
   const { modal, closeModal } = useGlobalModal();
-  const { theme, getMatchedThemeData } = useTheme();
-  const { borderStyles } = getMatchedThemeData();
+  
   return (
     <div
       className={`fixed top-0 left-0 z-50 flex items-center justify-center w-full h-full bg-white/80
@@ -31,7 +30,6 @@ export default function GlobalModal({ children }) {
           {children}
         </div>
         {/** @모달_하단디자인 */}
-        <div className={`w-full border-2 ${borderStyles}`}></div>
       </div>
     </div>
   );

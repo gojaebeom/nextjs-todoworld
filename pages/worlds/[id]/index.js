@@ -95,7 +95,7 @@ export default withPrivate(function WorldPage() {
             <a className="relative z-10 flex items-center justify-start w-full mt-4">
               <div
                 className={`flex items-center justify-between px-10 py-1 rounded-r-full 
-            ${query.room === "members" && "text-black bg-gray-100"}`}
+            ${query.room === "members" && "text-black bg-white"}`}
               >
                 <i className="mr-2 fa-light fa-user"></i>
                 <p className="pt-0.5">Members</p>
