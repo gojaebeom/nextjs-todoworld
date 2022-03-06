@@ -64,9 +64,12 @@ export default withPrivate(function WorldPage() {
           <p className="mt-1">{user?.nickname}</p>
           {memberList.map((member) => {
             if (member.id === user.id) {
-              return <p className="mt-1 font-pre-b">LV. 
-                <span className="text-2xl">{member?.level}</span>
-              </p>;
+              return (
+                <p className="mt-1 font-pre-b">
+                  LV.
+                  <span className="text-2xl">{member?.level}</span>
+                </p>
+              );
             }
           })}
         </div>
@@ -110,7 +113,7 @@ export default withPrivate(function WorldPage() {
             ${query.room === "members" && "text-black bg-white"}`}
               >
                 <i className="mr-2 fa-light fa-user"></i>
-                <p className="pt-0.5">Members</p>
+                <p className="pt-0.5">Member</p>
               </div>
               {query.room === "members" && (
                 <div className="absolute -right-5 w-[30px] h-[30px] bg-white rotate-45"></div>
@@ -118,18 +121,18 @@ export default withPrivate(function WorldPage() {
             </a>
           </Link>
           <Link
-            href="/worlds/[id]?room=settings"
-            as={`/worlds/${query.id}?room=settings`}
+            href="/worlds/[id]?room=groups"
+            as={`/worlds/${query.id}?room=groups`}
           >
             <a className="relative z-10 flex items-center justify-start w-full mt-4">
               <div
                 className={`flex items-center justify-between px-10 py-1 rounded-r-full 
-            ${query.room === "settings" && "text-black bg-white"}`}
+            ${query.room === "groups" && "text-black bg-white"}`}
               >
-                <i className="mr-2 fa-light fa-screwdriver-wrench"></i>
-                <p className="pt-0.5">Settings</p>
+                <i className="mr-2 fa-solid fa-party-horn"></i>
+                <p className="pt-0.5">Group</p>
               </div>
-              {query.room === "settings" && (
+              {query.room === "groups" && (
                 <div className="absolute -right-5 w-[30px] h-[30px] bg-white rotate-45"></div>
               )}
             </a>
