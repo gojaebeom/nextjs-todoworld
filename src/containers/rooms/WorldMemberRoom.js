@@ -1,13 +1,13 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { ImageOrDefault } from "src/components";
 import { useGlobalModal, useTheme, useWorld } from "src/hooks";
-import { GlobalModal, MemberGroupForm, WorldMemberInviteForm } from ".";
+import { GlobalModal, WorldMemberInviteForm } from "src/containers";
 
 export default function MemberRoom() {
   const { openModal, drawTypeMatchedModal } = useGlobalModal();
   const { getMatchedThemeData } = useTheme();
-  const { type, particleColor } = getMatchedThemeData();
-  const { memberList } = useWorld();
+  const { type } = getMatchedThemeData();
+  const { memberList, getCredentialsUserRole, changeRole, doExit } = useWorld();
 
   return (
     <div className="flex flex-col items-start w-full h-full p-10">
@@ -37,10 +37,15 @@ export default function MemberRoom() {
           <tr>
             <th>#</th>
             <th>프로필</th>
-            <th>이름(닉네임)</th>
+            <th>
+              <button>
+                <span className="mr-1">이름(닉네임)</span>
+                <i className="fa-light fa-arrow-down-a-z"></i>
+              </button>
+            </th>
             <th>레벨</th>
             <th>권한</th>
-            <th>설정</th>
+            <th></th>
           </tr>
         </thead>
         <tbody>
@@ -60,27 +65,42 @@ export default function MemberRoom() {
                 </td>
                 <td>{member.nickname}</td>
                 <td>LV. {member.level}</td>
-                <td>{member.role}</td>
                 <td>
-                  <button>탈퇴</button>
+                  <select
+                    value={member.role}
+                    className="border rounded-md px-2"
+                    disabled={
+                      getCredentialsUserRole() === "ADMIN" ? false : true
+                    }
+                    onChange={(e) => {
+                      changeRole(member.id, e.target.value);
+                    }}
+                  >
+                    <option value="ADMIN">관리자</option>
+                    <option value="MEMBER">일반</option>
+                  </select>
+                </td>
+                <td>
+                  <button onClick={() => doExit(member.id)}>
+                    <i className="fa-light fa-arrow-right-from-bracket"></i>
+                  </button>
                 </td>
               </tr>
             );
           })}
         </tbody>
       </table>
-
-      {/** @글로벌모달_그룹폼 */}
-      {drawTypeMatchedModal(
-        "MEMBER_GROUP_FORM",
-        <GlobalModal>
-          <MemberGroupForm />
-        </GlobalModal>
-      )}
-
       {/** @글로벌모달_초대폼 */}
       {drawTypeMatchedModal(
         "MEMBER_SEARCH_FORM",
+        <GlobalModal>
+          <WorldMemberInviteForm />
+        </GlobalModal>
+      )}
+
+      {/** 글로벌모달_회원수정폼 */}
+      {drawTypeMatchedModal(
+        "MEMBER_SETTING_FORM",
         <GlobalModal>
           <WorldMemberInviteForm />
         </GlobalModal>

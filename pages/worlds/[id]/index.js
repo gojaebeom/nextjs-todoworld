@@ -10,22 +10,27 @@ import {
 import { useRouter } from "next/router";
 import { ImageOrDefault } from "src/components";
 import { useEffect } from "react";
-import { GlobalModal, WorldMemberRoom, WorldScheduleRoom, WorldScheduleForm } from "src/containers";
+import {
+  GlobalModal,
+  WorldMemberRoom,
+  WorldScheduleRoom,
+  WorldScheduleForm,
+} from "src/containers";
 import { withPrivate } from "src/hoc";
 
 export default withPrivate(function WorldPage() {
   const { user } = useUser();
   const { theme, getMatchedThemeData } = useTheme();
-  const { particleColor, themeColor } = getMatchedThemeData();
   const { openModal, drawTypeMatchedModal } = useGlobalModal();
-  const { worldDetail, isValidWorldByWid, setWorldDetailStream } = useWorld();
+  const { worldDetail, isValidWorldByWid, setWorldDetailStream, memberList } =
+    useWorld();
   const { setScheduleListStream } = useSchedule();
 
   // ? URL 파싱
   const { query } = useRouter();
 
   // ? 월드 입장시 유효한 월드인지 판단, 월드 디테일 값 저장
-  useEffect(() => isValidWorldByWid(query.id), []);
+  useEffect(() => isValidWorldByWid(query.id), [worldDetail?.members]);
 
   // ? 월드 입장시 상세월드 데이터 저장
   useEffect(() => {
@@ -43,7 +48,7 @@ export default withPrivate(function WorldPage() {
   return (
     <>
       <aside className="w-[300px] min-w-[300px] h-full z-20">
-        <figure className="flex items-center justify-center w-full py-6 text-lg text-white">
+        <figure className="flex items-center justify-center w-full py-6 text-lg text-white font-pre-bb">
           {worldDetail?.name}
         </figure>
         <div className="flex flex-col items-center justify-center mt-10 text-white">
@@ -57,6 +62,13 @@ export default withPrivate(function WorldPage() {
             />
           </div>
           <p className="mt-1">{user?.nickname}</p>
+          {memberList.map((member) => {
+            if (member.id === user.id) {
+              return <p className="mt-1 font-pre-b">LV. 
+                <span className="text-2xl">{member?.level}</span>
+              </p>;
+            }
+          })}
         </div>
 
         <div className="flex items-center justify-center w-full px-6 mt-6">
@@ -101,7 +113,7 @@ export default withPrivate(function WorldPage() {
                 <p className="pt-0.5">Members</p>
               </div>
               {query.room === "members" && (
-                <div className="absolute -right-5 w-[30px] h-[30px] bg-gray-100 rotate-45"></div>
+                <div className="absolute -right-5 w-[30px] h-[30px] bg-white rotate-45"></div>
               )}
             </a>
           </Link>

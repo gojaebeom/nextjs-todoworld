@@ -51,8 +51,8 @@ export default function useWorld() {
     const worldRef = await db.collection("worlds").doc(wid).get();
     // ? wid에 해당하는 문서가 없으면 차단
     if (worldRef.data() === undefined) {
-      window.alert("잘못된 접근입니다.");
-      return Router.replace("/404");
+      //window.alert("잘못된 접근입니다.");
+      return Router.replace("/");
     }
 
     // ? 해당 월드에 유저가 가입되어있는지 확인
@@ -61,8 +61,8 @@ export default function useWorld() {
       if (member.id === user.id) result = true;
     });
     if (!result) {
-      window.alert("권한이 없는 유저입니다.");
-      return Router.replace("/404");
+      //window.alert("권한이 없는 유저입니다.");
+      return Router.replace("/");
     }
   };
 
@@ -122,6 +122,15 @@ export default function useWorld() {
 
     console.debug(list);
     setMemberList(list);
+  };
+
+  // ? 로그인중인 유저의 권한 확인
+  const getCredentialsUserRole = () => {
+    let result;
+    memberList.forEach((member) => {
+      if (member.id === user.id) result = member.role;
+    });
+    return result;
   };
 
   // ? 새로운 월드 생성 및 전역상태에 생성한 객체 추가
@@ -207,7 +216,7 @@ export default function useWorld() {
             id: user.id,
             level: 1,
             exp: 0,
-            role: "USER",
+            role: "MEMBER",
           },
         ],
       });
@@ -288,11 +297,85 @@ export default function useWorld() {
   };
 
   // ? 월드 탈퇴
-  const doExit = async (userId) => {
-    const newMembers = worldDetail.members.filter(
-      (member) => member.id !== userId
+  const doExit = async (memberId) => {
+    loadingOn();
+    // 탈퇴하려는 대상이 본인이거나 행하는사람이 관리자일 경우만 가능
+    let result = false;
+    // 자기 자신일 경우
+    if (user.id === memberId) result = true;
+    // 본인이 관리자일 경우
+    if (getCredentialsUserRole() === "ADMIN") result = true;
+    // 본인이 관리자이고 자기 자신을 탈퇴하려는 경우
+    if (getCredentialsUserRole() === "ADMIN" && user.id === memberId) {
+      loadingOff();
+      return window.alert("관리자는 탈퇴 대상이 아닙니다!");
+    }
+    if (!result) {
+      loadingOff();
+      return window.alert("탈퇴 권한이 없습니다.");
+    }
+
+    const answer = window.prompt(
+      "월드를 탈퇴하시는건가요?😭\n호기심에 눌러봤다면 취소버튼을 눌러 작업을 중단할 수 있어요.\n정말 탈퇴가 목적이라면 '탈퇴'를 입력해주세요."
     );
-    console.debug(newMembers);
+    if (answer !== "탈퇴") return loadingOff();
+
+    const filterList = worldDetail.members.filter(
+      (member) => member.id !== memberId
+    );
+    await db
+      .collection("worlds")
+      .doc(worldDetail.id)
+      .set({
+        ...worldDetail,
+        members: filterList,
+      });
+    loadingOff();
+  };
+
+  // 맴버 권한 변경
+  const changeRole = async (memberId, role) => {
+    loadingOn();
+    let result = false;
+    if (getCredentialsUserRole() === "ADMIN") result = true;
+    if (getCredentialsUserRole() === "ADMIN" && user.id === memberId) {
+      loadingOff();
+      return window.alert(
+        "관리자는 본인의 권한을 수정할 수 없습니다.\n타인에게 관리자 권한을 부여할 경우 권한은 양도되며\n본인은 일반권한으로 변경됩니다."
+      );
+    }
+    if (!result) {
+      loadingOff();
+      return window.alert("관리자 권한이 없습니다.");
+    }
+
+    const answer = window.confirm(
+      "관리자권한을 변경하는것에 동의하나요?\n본인은 일반권한으로 변경됩니다."
+    );
+    if (!answer) return loadingOff();
+    const filterList = worldDetail.members.map((member) => {
+      if (member.id === memberId) {
+        return {
+          ...member,
+          role: role,
+        };
+      } else if (member.id === user.id) {
+        return {
+          ...member,
+          role: "MEMBER",
+        };
+      } else {
+        return member;
+      }
+    });
+    await db
+      .collection("worlds")
+      .doc(worldDetail.id)
+      .set({
+        ...worldDetail,
+        members: filterList,
+      });
+    loadingOff();
   };
 
   return {
@@ -309,5 +392,7 @@ export default function useWorld() {
     setInviteUserByUserId,
     setJoinMemberList,
     memberList,
+    getCredentialsUserRole,
+    changeRole,
   };
 }

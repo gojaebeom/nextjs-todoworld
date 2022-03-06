@@ -57,8 +57,6 @@ export default function useUser() {
             ...invite.data(),
           });
         });
-        console.debug("초대리스트 저장 전-----------------");
-        console.debug(list);
         setInviteMessageList(list);
       });
   };
