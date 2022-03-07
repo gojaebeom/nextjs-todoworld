@@ -1,10 +1,11 @@
-import FullCalendar from "@fullcalendar/react";
+import FullCalendar, { addDays } from "@fullcalendar/react";
 import dayGridPlugin from "@fullcalendar/daygrid"; // a plugin!
 import interactionPlugin from "@fullcalendar/interaction"; // needed for dayClick
-import { useSchedule, useTheme, useWorld } from "src/hooks";
+import { useGlobalModal, useSchedule, useTheme, useWorld } from "src/hooks";
 import { useState } from "react";
 import { dateToString } from "src/util/date";
 import { ImageOrDefault } from "src/components";
+import { GlobalModal, WorldScheduleEditForm } from "src/containers";
 
 export default function ScheduleRoom() {
   const { getMatchedThemeData } = useTheme();
@@ -12,7 +13,9 @@ export default function ScheduleRoom() {
   const { worldDetail, memberList } = useWorld();
   const [checkedGroupId, setCheckedGroupId] = useState(null);
   const [checkedDate, setCheckedDate] = useState(null);
-  const { getFilterScheduleList } = useSchedule();
+  const [checkedFinishView, setCheckedFinishView] = useState(true);
+  const { getFilterScheduleList, changeFinished } = useSchedule();
+  const { openModal, drawTypeMatchedModal } = useGlobalModal();
 
   return (
     <>
@@ -42,6 +45,16 @@ export default function ScheduleRoom() {
               </button>
             );
           })}
+          <button
+            className={`px-2 mb-1 border ml-2 text-xs rounded-xl`}
+            style={{
+              color: !checkedFinishView && type,
+              border: !checkedFinishView && `1px solid ${type}`,
+            }}
+            onClick={() => setCheckedFinishView(!checkedFinishView)}
+          >
+            완료한 일정 숨기기
+          </button>
         </div>
         <FullCalendar
           eventClassNames="text-red-500"
@@ -55,11 +68,19 @@ export default function ScheduleRoom() {
           }}
           plugins={[dayGridPlugin, interactionPlugin]}
           initialView="dayGridMonth" //
-          // dateClick={handleDateClick} // 달력 클릭시 이벤트
+          eventClick={(e) => {
+            openModal("SCHEDULE_EDIT_FORM", "일정 수정", false, {
+              id: e.event.id,
+              title: e.event.title,
+              groupId: e.event.groupId,
+              start: e.event.start,
+              end: addDays(e.event.end, -1),
+            });
+          }}
           dateClick={(e) => setCheckedDate(e.dateStr)}
           dayMaxEvents={true} // 이벤트가 오버되면 높이 제한 (+ 몇 개식으로 표현)
           //scheduleList
-          events={getFilterScheduleList(checkedGroupId)}
+          events={getFilterScheduleList(checkedGroupId, checkedFinishView)}
           eventContent={(target) => {
             let color = null;
             worldDetail.groups.forEach((group) => {
@@ -89,7 +110,7 @@ export default function ScheduleRoom() {
         <div>
           {getFilterScheduleList(
             checkedGroupId,
-            true,
+            checkedFinishView,
             checkedDate ? checkedDate : dateToString()
           ).map((schedule) => {
             return (
@@ -100,7 +121,10 @@ export default function ScheduleRoom() {
                 {memberList.map((member) => {
                   if (member.id === schedule.userId) {
                     return (
-                      <div className="flex items-center justify-start pt-2 pl-2">
+                      <div
+                        className="relative flex items-center justify-start pt-2 pl-2"
+                        key={member.id}
+                      >
                         <ImageOrDefault
                           src={member.profileURL}
                           width={30}
@@ -108,12 +132,20 @@ export default function ScheduleRoom() {
                           className="rounded-full"
                         />
                         <div className="ml-1">{member.nickname}</div>
+                        <button
+                          style={{
+                            color: schedule.isFinished && type,
+                          }}
+                          onClick={() => changeFinished(schedule)}
+                        >
+                          <i className="absolute top-0 right-0 m-2 text-xl fa-light fa-badge-check"></i>
+                        </button>
                       </div>
                     );
                   }
                 })}
                 <pre className="p-2 text-sm font-pre-l">{schedule.title}</pre>
-                <div className="">
+                <div>
                   {worldDetail.groups.map((group) => {
                     if (group.id === schedule.groupId) {
                       return (
@@ -133,6 +165,13 @@ export default function ScheduleRoom() {
           })}
         </div>
       </div>
+      {/** @글로벌모달_초대폼 */}
+      {drawTypeMatchedModal(
+        "SCHEDULE_EDIT_FORM",
+        <GlobalModal>
+          <WorldScheduleEditForm />
+        </GlobalModal>
+      )}
     </>
   );
 }

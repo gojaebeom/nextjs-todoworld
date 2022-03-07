@@ -26,7 +26,7 @@ export default function useGroup() {
   };
 
   // ? 그룹 생성
-  const storeGroup = async (form) => {
+  const store = async (form) => {
     if (memberCopyList.filter((m) => m.checked).length === 0) {
       return window.alert("최소 한명 이상의 그룹원이 필요합니다.");
     }
@@ -58,10 +58,70 @@ export default function useGroup() {
     loadingOff();
   };
 
+  // ? 그룹 수정
+  const edit = async (form) => {
+    if (memberCopyList.filter((m) => m.checked).length === 0) {
+      return window.alert("최소 한명 이상의 그룹원이 필요합니다.");
+    }
+    if (color === null) {
+      return window.alert("그룹 색상을 선택해주세요.");
+    }
+    loadingOn();
+    const memberIdList = [];
+    memberCopyList.forEach((m) => {
+      if (m.checked) memberIdList.push(m.id);
+    });
+
+    const updateList = worldDetail.groups.map((group) => {
+      if (group.id === form.id) {
+        return {
+          ...group,
+          name: form.name,
+          color: color,
+          members: memberIdList,
+        };
+      } else {
+        return group;
+      }
+    });
+
+    await db
+      .collection("worlds")
+      .doc(worldDetail.id)
+      .set({
+        ...worldDetail,
+        groups: updateList,
+      });
+    closeModal();
+    loadingOff();
+  };
+
+  // ? 삭제
+  const destroy = async (groupId) => {
+    const result = window.confirm("정말 삭제하실건가요?");
+    if (!result) return;
+    loadingOn();
+
+    const filterList = worldDetail.groups.filter(
+      (group) => group.id !== groupId
+    );
+    await db
+      .collection("worlds")
+      .doc(worldDetail.id)
+      .set({
+        ...worldDetail,
+        groups: filterList,
+      });
+    closeModal();
+    loadingOff();
+  };
+
   return {
     memberCopyList,
     setMemberCopyList,
-    storeGroup,
+    store,
+    edit,
+    destroy,
     color,
     setColor,
     getGroupMembers,

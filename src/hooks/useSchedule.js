@@ -49,12 +49,25 @@ export default function useSchedule() {
   // ? 스캐줄 필터링
   const getFilterScheduleList = (
     groupId,
-    isFinishedView = true,
+    isFinishedView = false,
     day = null
   ) => {
     return scheduleList.filter((schedule) => {
-      if (groupId) {
-        if (schedule.groupId === groupId) {
+      if (isFinishedView || !schedule.isFinished) {
+        if (groupId) {
+          if (schedule.groupId === groupId) {
+            if (day === null) {
+              return schedule;
+            } else {
+              if (
+                new Date(schedule.start) <= new Date(day) &&
+                new Date(day) <= addDays(new Date(schedule.end), -1)
+              ) {
+                return schedule;
+              }
+            }
+          }
+        } else {
           if (day === null) {
             return schedule;
           } else {
@@ -66,35 +79,17 @@ export default function useSchedule() {
             }
           }
         }
-      } else {
-        if (day === null) {
-          return schedule;
-        } else {
-          if (
-            new Date(schedule.start) <= new Date(day) &&
-            new Date(day) <= addDays(new Date(schedule.end), -1)
-          ) {
-            return schedule;
-          }
-        }
       }
     });
   };
 
-  // ? 스캐출 생성
+  // ? 스캐줄 생성
   const store = async (form, dates, groupId) => {
     loadingOn();
     console.debug(dates);
 
     const start = dateToString(dates[0].startDate);
     const end = dateToString(addDays(dates[0].endDate, 1));
-
-    let groupColor = null;
-    if (groupId && worldDetail.groups) {
-      worldDetail.groups?.forEach((group) => {
-        if (group.id === groupId) groupColor = group.color;
-      });
-    }
 
     await db
       .collection("worlds")
@@ -108,11 +103,71 @@ export default function useSchedule() {
         start: start,
         end: end,
         isFinished: false,
-        color: groupColor,
       });
     loadingOff();
     closeModal();
   };
 
-  return { scheduleList, setScheduleListStream, store, getFilterScheduleList };
+  // ? 스캐줄 수정
+  const edit = async (form, dates, groupId) => {
+    loadingOn();
+    console.debug("스캐줄 수정!!");
+    const start = dateToString(dates[0].startDate);
+    const end = dateToString(addDays(dates[0].endDate, 1));
+
+    await db
+      .collection("worlds")
+      .doc(worldDetail.id)
+      .collection("schedules")
+      .doc(form.id)
+      .set({
+        ...scheduleObj,
+        userId: user.id,
+        groupId: groupId,
+        title: form.title,
+        start: start,
+        end: end,
+        isFinished: false,
+      });
+    loadingOff();
+    closeModal();
+  };
+
+  const changeFinished = async (schedule) => {
+    loadingOn();
+    await db
+      .collection("worlds")
+      .doc(worldDetail.id)
+      .collection("schedules")
+      .doc(schedule.id)
+      .set({
+        ...schedule,
+        isFinished: !schedule.isFinished,
+      });
+    loadingOff();
+  };
+
+  const destroy = async (scheduleId) => {
+    const result = window.confirm("정말 삭제하실건가요?");
+    if (!result) return;
+    loadingOn();
+    await db
+      .collection("worlds")
+      .doc(worldDetail.id)
+      .collection("schedules")
+      .doc(scheduleId)
+      .delete();
+    closeModal();
+    loadingOff();
+  };
+
+  return {
+    scheduleList,
+    setScheduleListStream,
+    store,
+    edit,
+    changeFinished,
+    getFilterScheduleList,
+    destroy,
+  };
 }

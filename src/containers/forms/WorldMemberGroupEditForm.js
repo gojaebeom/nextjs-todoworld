@@ -1,7 +1,9 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import { useForm } from "react-hook-form";
 import { useState } from "react";
 import { ImageOrDefault, ThemeButton, ThemeInput } from "src/components";
-import { useGroup } from "src/hooks";
+import { useGlobalModal, useGroup } from "src/hooks";
+import { useEffect } from "react";
 
 export default function MemberGroupForm() {
   const {
@@ -9,16 +11,28 @@ export default function MemberGroupForm() {
     handleSubmit,
     formState: { errors },
   } = useForm();
-  const { store, memberCopyList, setMemberCopyList, color, setColor } =
+  const { edit, destroy, memberCopyList, setMemberCopyList, color, setColor } =
     useGroup();
+  const { modal } = useGlobalModal();
   // on : 맴버 선택박스로 이동
   const [memberChoose, setMemberChoose] = useState(false);
 
+  useEffect(() => {
+    setColor(modal.data.color);
+  }, []);
+
   return !memberChoose ? (
     <form
-      onSubmit={handleSubmit((form) => store(form))}
+      onSubmit={handleSubmit((form) => edit(form))}
       className="min-w-[350px] max-w-[350px]"
     >
+      <input
+        {...register("id", {
+          required: "그룹 아이디는 필수값입니다.",
+        })}
+        value={modal.data.id}
+        className="hidden text-xs"
+      />
       <ThemeInput
         reactHookFormObj={{
           ...register("name", {
@@ -27,6 +41,7 @@ export default function MemberGroupForm() {
         }}
         label="name"
         name="name"
+        value={modal.data.name}
         type="text"
         placeholder="그룹 이름 입력"
         errors={errors}
@@ -160,6 +175,13 @@ export default function MemberGroupForm() {
         </div>
       </div>
       <ThemeButton className="mt-2">만들기</ThemeButton>
+      <button
+        type="button"
+        className="w-full mt-4 text-sm text-right text-red-500"
+        onClick={() => destroy(modal.data.id)}
+      >
+        삭제하기
+      </button>
     </form>
   ) : (
     <div className="flex flex-col">

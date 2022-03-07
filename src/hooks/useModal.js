@@ -7,6 +7,7 @@ const modalState = atom({
     isOpen: false,
     title: "modal title",
     backgroundClick: false,
+    data: null,
   },
 });
 
@@ -14,8 +15,8 @@ export default function useGlobalModal() {
   const [modal, setModal] = useRecoilState(modalState);
   const reset = useResetRecoilState(modalState);
 
-  const openModal = (type, title, backgroundClick = false) => {
-    setModal({ ...modal, isOpen: true, type, title, backgroundClick });
+  const openModal = (type, title, backgroundClick = false, data = null) => {
+    setModal({ ...modal, isOpen: true, type, title, backgroundClick, data });
   };
 
   const closeModal = () => reset();

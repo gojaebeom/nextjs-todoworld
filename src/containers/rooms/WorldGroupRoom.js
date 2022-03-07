@@ -1,5 +1,9 @@
 import { useGlobalModal, useGroup, useTheme, useWorld } from "src/hooks";
-import { GlobalModal, WorldMemberGroupForm } from "src/containers";
+import {
+  GlobalModal,
+  WorldMemberGroupEditForm,
+  WorldMemberGroupForm,
+} from "src/containers";
 
 export default function WorldGroupRoom() {
   const { getMatchedThemeData } = useTheme();
@@ -19,34 +23,57 @@ export default function WorldGroupRoom() {
         그룹 만들기
         <i className="ml-2 text-xl fa-light fa-party-horn"></i>
       </button>
-      <div className="flex w-full mt-4">
+      <div className="flex items-start w-full mt-4">
         {worldDetail?.groups?.map((group, i) => {
           return (
             <div
               key={i}
-              className="p-2 m-2 rounded-xl"
+              className="h-auto p-2 m-2 rounded-xl"
               style={{ border: `2px solid ${group.color}` }}
             >
               <p>
                 {group.name}
-                <span className="px-2 ml-2 text-xs bg-gray-200 rounded-xl">
-                  {group.members.length}명
-                </span>
+                <button
+                  onClick={() =>
+                    openModal("GROUP_EDIT_FORM", "그룹 수정하기", false, {
+                      id: group.id,
+                      name: group.name,
+                      members: group.members,
+                      color: group.color,
+                    })
+                  }
+                >
+                  <i
+                    className="ml-4 fa-light fa-pen-to-square"
+                    style={{ color: group.color }}
+                  ></i>
+                </button>
               </p>
               <div>
                 {getGroupMembers(group.members).map((member) => {
-                  return <div key={member.id} className="ml-2">| {member.nickname}</div>;
+                  return (
+                    <div key={member.id}>
+                      <span className="text-xs">#</span> {member.nickname}
+                    </div>
+                  );
                 })}
               </div>
             </div>
           );
         })}
       </div>
-      {/** @글로벌모달_초대폼 */}
+      {/** @글로벌모달_그룹생성폼 */}
       {drawTypeMatchedModal(
         "GROUP_FORM",
         <GlobalModal>
           <WorldMemberGroupForm />
+        </GlobalModal>
+      )}
+      {/** @글로벌모달_그룹수정폼 */}
+      {drawTypeMatchedModal(
+        "GROUP_EDIT_FORM",
+        <GlobalModal>
+          <WorldMemberGroupEditForm />
         </GlobalModal>
       )}
     </div>

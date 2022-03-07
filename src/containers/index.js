@@ -6,8 +6,10 @@ import GlobalModal from "./GlobalModal";
 import UserEditForm from "./forms/UserEditForm";
 import WorldStoreForm from "./forms/WorldStoreForm";
 import WorldScheduleForm from "./forms/WorldScheduleForm";
+import WorldScheduleEditForm from "./forms/WorldScheduleEditForm";
 import WorldMemberInviteForm from "./forms/WorldMemberInviteForm";
 import WorldMemberGroupForm from "./forms/WorldMemberGroupForm";
+import WorldMemberGroupEditForm from "./forms/WorldMemberGroupEditForm";
 // room
 import WorldScheduleRoom from "./rooms/WorldScheduleRoom";
 import WorldMemberRoom from "./rooms/WorldMemberRoom";
@@ -21,9 +23,11 @@ export {
   WorldStoreForm,
   UserEditForm,
   WorldScheduleForm,
+  WorldScheduleEditForm,
   WorldScheduleRoom,
   WorldMemberRoom,
   WorldMemberInviteForm,
   WorldMemberGroupForm,
+  WorldMemberGroupEditForm,
   WorldGroupRoom,
 };
