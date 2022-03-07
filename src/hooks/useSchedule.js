@@ -3,6 +3,7 @@ import { atom, useRecoilState } from "recoil";
 import { dateToString } from "src/util/date";
 import { db } from "src/util/firebase";
 import { useGlobalModal, useLoading, useWorld } from ".";
+import useUser from "./useUser";
 
 const scheduleListState = atom({
   key: "scheduleListState",
@@ -11,9 +12,10 @@ const scheduleListState = atom({
 
 const scheduleObj = {
   title: "",
-  party: null,
   start: dateToString(),
   end: dateToString(addDays(new Date(), 1)),
+  isFinished: false,
+  color: null,
 };
 
 export default function useSchedule() {
@@ -21,6 +23,7 @@ export default function useSchedule() {
   const { worldDetail } = useWorld();
   const { loadingOff, loadingOn } = useLoading();
   const { closeModal } = useGlobalModal();
+  const { user } = useUser();
 
   // ? 접속중인 월드의 스케줄 리스트 저장
   const setScheduleListStream = async () => {
@@ -43,13 +46,55 @@ export default function useSchedule() {
       });
   };
 
+  // ? 스캐줄 필터링
+  const getFilterScheduleList = (
+    groupId,
+    isFinishedView = true,
+    day = null
+  ) => {
+    return scheduleList.filter((schedule) => {
+      if (groupId) {
+        if (schedule.groupId === groupId) {
+          if (day === null) {
+            return schedule;
+          } else {
+            if (
+              new Date(schedule.start) <= new Date(day) &&
+              new Date(day) <= addDays(new Date(schedule.end), -1)
+            ) {
+              return schedule;
+            }
+          }
+        }
+      } else {
+        if (day === null) {
+          return schedule;
+        } else {
+          if (
+            new Date(schedule.start) <= new Date(day) &&
+            new Date(day) <= addDays(new Date(schedule.end), -1)
+          ) {
+            return schedule;
+          }
+        }
+      }
+    });
+  };
+
   // ? 스캐출 생성
-  const store = async (form, dates) => {
+  const store = async (form, dates, groupId) => {
     loadingOn();
     console.debug(dates);
 
     const start = dateToString(dates[0].startDate);
     const end = dateToString(addDays(dates[0].endDate, 1));
+
+    let groupColor = null;
+    if (groupId && worldDetail.groups) {
+      worldDetail.groups?.forEach((group) => {
+        if (group.id === groupId) groupColor = group.color;
+      });
+    }
 
     await db
       .collection("worlds")
@@ -57,14 +102,17 @@ export default function useSchedule() {
       .collection("schedules")
       .add({
         ...scheduleObj,
+        userId: user.id,
+        groupId: groupId,
         title: form.title,
         start: start,
         end: end,
-        party: null,
+        isFinished: false,
+        color: groupColor,
       });
     loadingOff();
     closeModal();
   };
 
-  return { scheduleList, setScheduleListStream, store };
+  return { scheduleList, setScheduleListStream, store, getFilterScheduleList };
 }

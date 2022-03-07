@@ -5,7 +5,6 @@ import { useGlobalModal, useLoading, useUser } from ".";
 import { v4 } from "uuid";
 import { catchHandler } from "src/util/catchHandler";
 import { useState } from "react";
-import { list } from "postcss";
 
 const worldListState = atom({
   key: "worldListState",
@@ -159,7 +158,7 @@ export default function useWorld() {
     const worldRef = await db.collection("worlds").add({
       thumbnailURL: url,
       name: form.name,
-      parties: [],
+      groups: [],
       members: [
         // ? 새로운 맴버 추가
         {
@@ -177,7 +176,7 @@ export default function useWorld() {
         id: worldRef.id,
         thumbnailURL: url,
         name: form.name,
-        parties: [],
+        groups: [],
         members: [
           // ? 새로운 맴버 추가
           {
@@ -333,7 +332,7 @@ export default function useWorld() {
     loadingOff();
   };
 
-  // 맴버 권한 변경
+  // ? 맴버 권한 변경
   const changeRole = async (memberId, role) => {
     loadingOn();
     let result = false;

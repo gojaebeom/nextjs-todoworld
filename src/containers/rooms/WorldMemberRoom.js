@@ -51,7 +51,7 @@ export default function MemberRoom() {
         <tbody>
           {memberList.map((member, i) => {
             return (
-              <tr key={member.id} className="border-t border-b text-center">
+              <tr key={member.id} className="text-center border-t border-b">
                 <td>{i + 1}</td>
                 <td className="p-2">
                   <div className="flex items-center justify-center">
@@ -68,7 +68,7 @@ export default function MemberRoom() {
                 <td>
                   <select
                     value={member.role}
-                    className="border rounded-md px-2"
+                    className="px-2 border rounded-md"
                     disabled={
                       getCredentialsUserRole() === "ADMIN" ? false : true
                     }
@@ -93,14 +93,6 @@ export default function MemberRoom() {
       {/** @글로벌모달_초대폼 */}
       {drawTypeMatchedModal(
         "MEMBER_SEARCH_FORM",
-        <GlobalModal>
-          <WorldMemberInviteForm />
-        </GlobalModal>
-      )}
-
-      {/** 글로벌모달_회원수정폼 */}
-      {drawTypeMatchedModal(
-        "MEMBER_SETTING_FORM",
         <GlobalModal>
           <WorldMemberInviteForm />
         </GlobalModal>

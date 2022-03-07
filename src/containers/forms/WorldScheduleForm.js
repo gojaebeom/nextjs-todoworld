@@ -2,7 +2,7 @@
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { ThemeArea, ThemeButton } from "src/components";
-import { useSchedule, useTheme } from "src/hooks";
+import { useSchedule, useTheme, useWorld } from "src/hooks";
 
 import { DateRange } from "react-date-range";
 import ko from "date-fns/locale/ko";
@@ -10,7 +10,6 @@ import "react-date-range/dist/styles.css"; // main style file
 import "react-date-range/dist/theme/default.css";
 
 export default function ScheduleForm() {
-  const { store } = useSchedule();
   const {
     register,
     handleSubmit,
@@ -23,13 +22,16 @@ export default function ScheduleForm() {
       key: "selection",
     },
   ]);
+  const [checkedGroupId, setCheckedGroupId] = useState(null);
 
   const { getMatchedThemeData } = useTheme();
   const { type } = getMatchedThemeData();
+  const { worldDetail } = useWorld();
+  const { store } = useSchedule();
 
   return (
     <form
-      onSubmit={handleSubmit((form) => store(form, dates))}
+      onSubmit={handleSubmit((form) => store(form, dates, checkedGroupId))}
       className="min-w-[350px] max-w-[350px]"
     >
       <ThemeArea
@@ -48,8 +50,36 @@ export default function ScheduleForm() {
         placeholder={`간단하게 일정을 작성해보세요.\n상세한 일정은 더더욱 좋아요!`}
         errors={errors}
       />
-
-      <label className="text-xs text-gray-500">날짜선택</label>
+      <label className="text-xs text-gray-500">그룹선택</label>
+      <div className="flex flex-wrap mb-4">
+        <button
+          type="button"
+          className={`px-2 mb-1 mr-1 text-sm text-white rounded-xl bg-gray-500 ${
+            checkedGroupId === null && "border-2 border-gray-600"
+          }`}
+          onClick={() => setCheckedGroupId(null)}
+        >
+          전체
+        </button>
+        {worldDetail.groups?.map((group, i) => {
+          return (
+            <button
+              type="button"
+              key={i}
+              className={`px-2 mb-1 mr-1 text-sm text-white rounded-xl ${
+                checkedGroupId === group.id && "border-2 border-gray-600"
+              }`}
+              style={{ backgroundColor: group.color }}
+              onClick={() => setCheckedGroupId(group.id)}
+            >
+              {group.name}
+            </button>
+          );
+        })}
+      </div>
+      <label className="text-xs text-gray-500">
+        날짜선택 (오늘날짜가 기본값입니다.)
+      </label>
       <DateRange
         className="w-full"
         editableDateInputs={true}

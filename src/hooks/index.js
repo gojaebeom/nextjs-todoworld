@@ -6,6 +6,7 @@ import useWorld from "./useWorld";
 import useImage from "./useImage";
 import useImageCrop from "./useImageCrop";
 import useSchedule from "./useSchedule";
+import useGroup from "./useGourp";
 
 export {
   useTheme,
@@ -16,4 +17,5 @@ export {
   useImage,
   useImageCrop,
   useSchedule,
+  useGroup,
 };

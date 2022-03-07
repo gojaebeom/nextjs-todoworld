@@ -15,6 +15,7 @@ import {
   WorldMemberRoom,
   WorldScheduleRoom,
   WorldScheduleForm,
+  WorldGroupRoom,
 } from "src/containers";
 import { withPrivate } from "src/hoc";
 
@@ -65,7 +66,7 @@ export default withPrivate(function WorldPage() {
           {memberList.map((member) => {
             if (member.id === user.id) {
               return (
-                <p className="mt-1 font-pre-b">
+                <p className="mt-1 font-pre-b" key={member.id}>
                   LV.
                   <span className="text-2xl">{member?.level}</span>
                 </p>
@@ -159,9 +160,10 @@ export default withPrivate(function WorldPage() {
         >
           {query.room === "home" && <WorldScheduleRoom />}
           {query.room === "members" && <WorldMemberRoom />}
+          {query.room === "groups" && <WorldGroupRoom />}
         </main>
       </div>
-      {/** @글로벌모달_유저수정타입 */}
+      {/** @글로벌모달_스캐줄생성 */}
       {drawTypeMatchedModal(
         "SCHEDULE_FORM",
         <GlobalModal>
