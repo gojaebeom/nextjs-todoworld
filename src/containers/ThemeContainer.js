@@ -1,5 +1,5 @@
 import { ParticleContainer } from "src/containers";
-import { useEmojiToast, useGlobalModal, useLoading, useTheme } from "src/hooks";
+import { useGlobalModal, useLoading, useTheme } from "src/hooks";
 import EmojiToast from "./EmojiToast";
 import ThemeForm from "./forms/ThemeForm";
 import GlobalModal from "./GlobalModal";

@@ -10,6 +10,13 @@ import "styles/scroll.css";
 import "styles/custom-daterange.css";
 import "styles/font.css";
 import "styles/firework.css";
+import "styles/rainbow-button.css";
+
+// 배포 환경에서 console.log, console.warn 지우기
+if (process.env.NODE_ENV === "production") {
+  console.log = function no_console() {};
+  console.debug = function no_console() {};
+}
 
 function MyApp({ Component, pageProps }) {
   return (

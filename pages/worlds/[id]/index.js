@@ -16,6 +16,7 @@ import {
   WorldScheduleRoom,
   WorldScheduleForm,
   WorldGroupRoom,
+  WorldEditForm,
 } from "src/containers";
 import { withPrivate } from "src/hoc";
 
@@ -50,7 +51,7 @@ export default withPrivate(function WorldPage() {
     <>
       <aside className="w-[300px] min-w-[300px] h-full z-20">
         <figure className="flex items-center justify-center w-full py-6 text-lg text-white font-pre-bb">
-          {worldDetail?.name}
+          <span>{worldDetail?.name}</span>
         </figure>
         <div className="flex flex-col items-center justify-center mt-6 text-white">
           <div className="flex items-center justify-center bg-white border-4 border-white rounded-full">
@@ -71,13 +72,13 @@ export default withPrivate(function WorldPage() {
                   key={member.id}
                 >
                   <div>
-                    LV.
+                    LV.&nbsp;
                     <span className="text-2xl">{member?.level}</span>
                   </div>
 
                   <div className="w-2/3 h-4 ml-2 overflow-hidden border rounded-2xl">
                     <div
-                      className="h-full transition-all bg-white rounded-r-2xl"
+                      className="h-full transition-all duration-200 bg-white rounded-r-2xl"
                       style={{ width: member.exp + "%" }}
                     ></div>
                   </div>
@@ -150,6 +151,13 @@ export default withPrivate(function WorldPage() {
               )}
             </a>
           </Link>
+          <button
+            className="relative z-10 flex items-center justify-start w-full px-10 py-1 mt-4"
+            onClick={() => openModal("WORLD_EDIT_FORM", "월드 수정")}
+          >
+            <i className="mr-1 fa-light fa-gears"></i>
+            <p className="pt-0.5">Setting</p>
+          </button>
           <Link href="/users/me" as={`/users/me`}>
             <a className="relative z-10 flex items-center justify-start w-full mt-4">
               <div
@@ -180,6 +188,13 @@ export default withPrivate(function WorldPage() {
         "SCHEDULE_FORM",
         <GlobalModal>
           <WorldScheduleForm />
+        </GlobalModal>
+      )}
+      {/** @글로벌모달_월드수정폼 */}
+      {drawTypeMatchedModal(
+        "WORLD_EDIT_FORM",
+        <GlobalModal>
+          <WorldEditForm />
         </GlobalModal>
       )}
     </>

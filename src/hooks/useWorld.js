@@ -97,7 +97,9 @@ export default function useWorld() {
           id: snapshot.id,
           ...snapshot.data(),
         });
-        setJoinMemberList(snapshot.data().members);
+        if (snapshot.data()) {
+          setJoinMemberList(snapshot.data().members);
+        }
       });
   };
 
@@ -156,7 +158,7 @@ export default function useWorld() {
       });
     }
 
-    // ? 월드 생성
+    // 월드 생성
     const worldRef = await db.collection("worlds").add({
       thumbnailURL: url,
       name: form.name,
@@ -190,6 +192,41 @@ export default function useWorld() {
         ],
       },
     ]);
+
+    loadingOff();
+    closeModal();
+  };
+
+  // ? 월드 수정
+  const edit = async (form, file) => {
+    loadingOn();
+
+    let url = "";
+    if (file) {
+      console.debug("파일존재");
+      const storageRef = storage.ref();
+      const randomId = v4();
+      const thumbnailRef = storageRef.child(`thumbnails/${randomId}.png`);
+
+      await thumbnailRef.put(file).catch((error) => {
+        console.debug(error);
+        catchHandler("썸네일 저장에 실패했습니다.", () => loadingOff());
+      });
+
+      url = await thumbnailRef.getDownloadURL().catch((error) => {
+        console.debug(error);
+        catchHandler("다운로드URL을 가져오지 못했습니다.", () => loadingOff());
+      });
+    }
+
+    await db
+      .collection("worlds")
+      .doc(worldDetail.id)
+      .set({
+        ...worldDetail,
+        thumbnailURL: url ? url : worldDetail.thumbnailURL,
+        name: form.name,
+      });
 
     loadingOff();
     closeModal();
@@ -415,6 +452,18 @@ export default function useWorld() {
       });
   };
 
+  // ? 월드삭제
+  const destroy = async () => {
+    const result = window.prompt(
+      "월드를 삭제하려면 [월드삭제]를 입력해주세요."
+    );
+    if (result !== "월드삭제") return;
+    loadingOn();
+    await db.collection("worlds").doc(worldDetail.id).delete();
+    Router.replace("/");
+    loadingOff();
+  };
+
   return {
     worldList,
     worldDetail,
@@ -422,6 +471,7 @@ export default function useWorld() {
     setWorldListByCredentialsUser,
     setWorldDetailStream,
     store,
+    edit,
     join,
     inviteUser,
     doInvite,
@@ -432,5 +482,6 @@ export default function useWorld() {
     getCredentialsUserRole,
     changeRole,
     memberLevelUpdate,
+    destroy,
   };
 }

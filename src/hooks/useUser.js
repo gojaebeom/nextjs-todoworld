@@ -130,14 +130,14 @@ export default function useUser() {
       .doc(user.id)
       .set({
         ...user,
-        profileURL: url,
+        profileURL: url ? url : user.profileURL,
         nickname: form.nickname,
         phoneNumber: form.phoneNumber,
       });
 
     setUser({
       ...user,
-      profileURL: url,
+      profileURL: url ? url : user.profileURL,
       nickname: form.nickname,
       phoneNumber: form.phoneNumber,
     });
@@ -154,7 +154,7 @@ export default function useUser() {
   // ? 회원탈퇴
   const destroy = async () => {
     const result = window.prompt(
-      `탈퇴하려면 회원 ID '${user.id}'를 입력해주세요.`
+      `탈퇴하려면 [${user.id}] code를 입력해주세요.`
     );
     if (result !== user.id) return false;
 

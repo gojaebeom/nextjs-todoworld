@@ -1,15 +1,8 @@
-import Image from "next/image";
-import happyEmojiImg from "src/assets/images/emoji-cong.png";
+import { ImageOrDefault } from "src/components";
 import { useEmojiToast } from "src/hooks";
 
 function EmojiToast() {
   const { emojiToast, closeEmojiToast } = useEmojiToast();
-
-  let emoji = happyEmojiImg;
-  if (emojiToast.type === "HAPPY") emoji = happyEmojiImg;
-  else if (emojiToast.type === "STAR") emoji = starEmojiImg;
-  else if (emojiToast.type === "SAD") emoji = sadEmojiImg;
-  else if (emojiToast.type === "HEART") emoji = heartEmojiImg;
 
   return (
     emojiToast.open && (
@@ -23,7 +16,7 @@ function EmojiToast() {
           className="max-w-[300px] p-4 rounded-[4px] flex flex-col justify-center items-center"
           // onClick={(e) => e.stopPropagation()}
         >
-          <Image src={emoji} alt="img" />
+          <ImageOrDefault src="/emoji-cong.png" alt="img" width={250} height={"auto"} />
           <p className="mt-2 text-xl text-white font-pre-bb">
             {emojiToast.message}
           </p>

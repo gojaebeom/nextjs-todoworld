@@ -16,9 +16,9 @@ export default withPublic(function SignUpPage() {
 
   return (
     <>
-      <div className="z-10 flex flex-col items-end justify-center w-1/2 h-full p-12 text-white">
-        <div className="flex items-center mb-4 text-4xl font-apple-h">
-          <p className="pt-1.5">TODO WORLD</p>
+      <div className="relative z-10 flex flex-col items-end justify-center w-1/2 h-full p-12">
+        <div className="flex items-center mb-4 text-4xl font-pre-bb">
+          <p>TODO WORLD</p>
           <i className="ml-2 fa-light fa-earth-asia"></i>
         </div>
         <div className="mb-20 text-lg text-right">

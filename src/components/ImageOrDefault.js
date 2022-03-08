@@ -1,22 +1,22 @@
 /* eslint-disable @next/next/no-img-element */
-import Image from "next/image";
-import DefaultAvatar from "src/assets/images/default_avatar.svg";
 
 export default function ImageOrDefault({
   src,
   alt = "image",
-  defaultImg = DefaultAvatar,
   className,
-  width = 50,
-  height = 50,
+  width,
+  height,
 }) {
   return (
-    <Image
-      src={src ? src : defaultImg}
-      alt={alt}
-      width={width}
-      height={height}
-      className={className}
-    />
+    <div
+      className={"flex items-center justify-center overflow-hidden ".concat(className)}
+      style={{ width: width, height: height }}
+    >
+      <img
+        src={src ? src : "/default_avatar.svg"}
+        alt={alt}
+        className="w-full h-full"
+      />
+    </div>
   );
 }

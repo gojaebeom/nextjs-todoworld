@@ -6,6 +6,7 @@ import EmojiToast from "./EmojiToast";
 // form
 import UserEditForm from "./forms/UserEditForm";
 import WorldStoreForm from "./forms/WorldStoreForm";
+import WorldEditForm from "./forms/WorldEditForm";
 import WorldScheduleForm from "./forms/WorldScheduleForm";
 import WorldScheduleEditForm from "./forms/WorldScheduleEditForm";
 import WorldMemberInviteForm from "./forms/WorldMemberInviteForm";
@@ -24,6 +25,7 @@ export {
   ScaffoldContainer,
   GlobalModal,
   WorldStoreForm,
+  WorldEditForm,
   UserEditForm,
   WorldScheduleForm,
   ThemeForm,

@@ -11,6 +11,8 @@ const withTM = require("next-transpile-modules")([
 const nextConfig = {
   reactStrictMode: true,
   images: {
+    loader: "imgix",
+    path: "",
     domains: ["firebasestorage.googleapis.com"],
   },
 };

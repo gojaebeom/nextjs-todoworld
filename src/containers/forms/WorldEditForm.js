@@ -2,20 +2,20 @@
 import { useForm } from "react-hook-form";
 import { ImageFileInput, ThemeButton, ThemeInput } from "src/components";
 import { useImage, useWorld } from "src/hooks";
-// import ReactCrop from "react-image-crop";
 
-export default function WorldStoreForm() {
+export default function WorldEditForm() {
   const { handleFileOnChange, file, fileUrl } = useImage();
-  const { store } = useWorld();
+  const { worldDetail, edit, destroy } = useWorld();
+
   const {
     register,
     handleSubmit,
     formState: { errors },
   } = useForm();
-  
+
   return (
     <form
-      onSubmit={handleSubmit((form) => store(form, file))}
+      onSubmit={handleSubmit((form) => edit(form, file))}
       className="min-w-[350px] max-w-[350px]"
     >
       <div className="flex flex-col w-full">
@@ -41,11 +41,19 @@ export default function WorldStoreForm() {
         label="투두월드 이름"
         name="name"
         type="text"
+        value={worldDetail.name}
         placeholder="이름 입력"
         errors={errors}
       />
 
-      <ThemeButton className="mt-2">생성하기</ThemeButton>
+      <ThemeButton className="mt-2">수정하기</ThemeButton>
+      <button
+        type="button"
+        className="w-full mt-4 text-sm text-right text-red-500"
+        onClick={() => destroy()}
+      >
+        삭제하기
+      </button>
     </form>
   );
 }
