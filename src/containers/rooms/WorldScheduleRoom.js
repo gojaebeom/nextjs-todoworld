@@ -102,12 +102,12 @@ export default function ScheduleRoom() {
           // eslint-disable-next-line react/jsx-no-duplicate-props
         />
       </div>
-      <div className="w-[400px] max-w-[400px] h-full bg-gray-50 p-4 text-gray-700">
+      <div className="min-w-[350px] max-w-[350px] h-full bg-gray-50 p-2 text-gray-700">
         <div className="mb-4 text-2xl font-pre-bb">
           {checkedDate === null ? "오늘" : checkedDate}
           &nbsp;일정
         </div>
-        <div>
+        <div className="h-[95%] overflow-y-auto custom-scroll">
           {getFilterScheduleList(
             checkedGroupId,
             checkedFinishView,
@@ -144,7 +144,9 @@ export default function ScheduleRoom() {
                     );
                   }
                 })}
-                <pre className="p-2 text-sm font-pre-l">{schedule.title}</pre>
+                <pre className="p-2 text-sm whitespace-pre-wrap font-pre-l">
+                  {schedule.title}
+                </pre>
                 <div>
                   {worldDetail.groups.map((group) => {
                     if (group.id === schedule.groupId) {

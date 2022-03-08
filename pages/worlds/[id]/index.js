@@ -52,7 +52,7 @@ export default withPrivate(function WorldPage() {
         <figure className="flex items-center justify-center w-full py-6 text-lg text-white font-pre-bb">
           {worldDetail?.name}
         </figure>
-        <div className="flex flex-col items-center justify-center mt-10 text-white">
+        <div className="flex flex-col items-center justify-center mt-6 text-white">
           <div className="flex items-center justify-center bg-white border-4 border-white rounded-full">
             <ImageOrDefault
               className="z-10 rounded-full"
@@ -66,16 +66,28 @@ export default withPrivate(function WorldPage() {
           {memberList.map((member) => {
             if (member.id === user.id) {
               return (
-                <p className="mt-1 font-pre-b" key={member.id}>
-                  LV.
-                  <span className="text-2xl">{member?.level}</span>
-                </p>
+                <div
+                  className="flex flex-col items-center justify-center w-full mt-1 font-pre-b"
+                  key={member.id}
+                >
+                  <div>
+                    LV.
+                    <span className="text-2xl">{member?.level}</span>
+                  </div>
+
+                  <div className="w-2/3 h-4 ml-2 overflow-hidden border rounded-2xl">
+                    <div
+                      className="h-full transition-all bg-white rounded-r-2xl"
+                      style={{ width: member.exp + "%" }}
+                    ></div>
+                  </div>
+                </div>
               );
             }
           })}
         </div>
 
-        <div className="flex items-center justify-center w-full px-6 mt-6">
+        <div className="flex items-center justify-center w-full px-6 mt-10">
           <button
             className="w-full px-4 py-2 text-black bg-white rounded-md"
             onClick={() => openModal("SCHEDULE_FORM", "일정 작성")}

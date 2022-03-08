@@ -5,6 +5,7 @@ import { useGlobalModal, useLoading, useUser } from ".";
 import { v4 } from "uuid";
 import { catchHandler } from "src/util/catchHandler";
 import { useState } from "react";
+import { useEmojiToast } from "./useToast";
 
 const worldListState = atom({
   key: "worldListState",
@@ -38,6 +39,7 @@ export default function useWorld() {
   const { loadingOff, loadingOn } = useLoading();
   const { closeModal } = useGlobalModal();
   const Router = useRouter();
+  const { openEmojiToast } = useEmojiToast();
 
   // ? 유효한 월드에 진입했는지 판단
   const isValidWorldByWid = async (wid) => {
@@ -377,6 +379,42 @@ export default function useWorld() {
     loadingOff();
   };
 
+  // ? 맴버의 레벨 올리기
+  const memberLevelUpdate = async (addExp = 0) => {
+    const updateList = worldDetail.members.map((m) => {
+      if (m.id === user.id) {
+        // 현재 로그인중인 유저의 레벨과 경험치
+        const currentLevel = m.level;
+        const currentExp = m.exp;
+
+        const limitExp = 100; // 정해진 경험치 최대치
+        let updateLevel = currentLevel; // 변경될 레벨
+        let sumExp = Number(currentExp) + Number(addExp); // 경험치 합산
+        if (sumExp >= limitExp) {
+          // 경험치 합산이 100이 넘어가면 레벨 증가
+          updateLevel += Math.floor(sumExp / limitExp);
+          sumExp = sumExp % limitExp;
+
+          //? 레벨업 효과
+          openEmojiToast();
+        }
+        return {
+          ...m,
+          level: updateLevel,
+          exp: sumExp,
+        };
+      } else return m;
+    });
+
+    await db
+      .collection("worlds")
+      .doc(worldDetail.id)
+      .set({
+        ...worldDetail,
+        members: updateList,
+      });
+  };
+
   return {
     worldList,
     worldDetail,
@@ -393,5 +431,6 @@ export default function useWorld() {
     memberList,
     getCredentialsUserRole,
     changeRole,
+    memberLevelUpdate,
   };
 }

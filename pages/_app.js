@@ -9,6 +9,7 @@ import "styles/calendar.css";
 import "styles/scroll.css";
 import "styles/custom-daterange.css";
 import "styles/font.css";
+import "styles/firework.css";
 
 function MyApp({ Component, pageProps }) {
   return (

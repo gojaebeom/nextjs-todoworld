@@ -20,7 +20,7 @@ const scheduleObj = {
 
 export default function useSchedule() {
   const [scheduleList, setScheduleList] = useRecoilState(scheduleListState);
-  const { worldDetail } = useWorld();
+  const { worldDetail, memberLevelUpdate } = useWorld();
   const { loadingOff, loadingOn } = useLoading();
   const { closeModal } = useGlobalModal();
   const { user } = useUser();
@@ -104,6 +104,12 @@ export default function useSchedule() {
         end: end,
         isFinished: false,
       });
+
+    // ? 레벨 업데이트
+    console.debug(worldDetail.members.filter((m) => m.id === user.id)[0].exp);
+
+    memberLevelUpdate(form.title.length);
+
     loadingOff();
     closeModal();
   };
