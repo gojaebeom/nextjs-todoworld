@@ -10,6 +10,7 @@ const withTM = require("next-transpile-modules")([
 
 const nextConfig = {
   reactStrictMode: true,
+  trailingSlash: true,
   images: {
     loader: "imgix",
     path: "",

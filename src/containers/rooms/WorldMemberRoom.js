@@ -44,6 +44,7 @@ export default function MemberRoom() {
               </button>
             </th>
             <th>레벨</th>
+            <th>전화번호</th>
             <th>권한</th>
             <th></th>
           </tr>
@@ -65,6 +66,7 @@ export default function MemberRoom() {
                 </td>
                 <td>{member.nickname}</td>
                 <td>LV. {member.level}</td>
+                <td>{member.phoneNumber ? member.phoneNumber : "없음"}</td>
                 <td>
                   <select
                     value={member.role}

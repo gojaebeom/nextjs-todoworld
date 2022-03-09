@@ -114,6 +114,7 @@ export default function useWorld() {
           list.push({
             id: user.id,
             nickname: user.data().nickname,
+            phoneNumber: user.data().phoneNumber,
             profileURL: user.data().profileURL,
             level: member.level,
             exp: member.exp,

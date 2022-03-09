@@ -14,10 +14,12 @@ export default withPublic(function KakaoRedirectPage() {
   console.debug(query);
 
   useEffect(() => {
+    console.debug("유즈 이펙트 실행");
     query.code && doFirebaseCustomTokenLogin();
   }, []);
 
   const doFirebaseCustomTokenLogin = async () => {
+    console.debug("요처엉어어엉어어엉엉");
     // TODO: 카카오 코드를 통한 파이어베이스 커스텀 토큰 요청
     loadingOn();
     const { data } = await axios({
