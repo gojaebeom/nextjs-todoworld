@@ -1,3 +1,4 @@
+/* eslint-disable @next/next/no-img-element */
 import { addDays } from "@fullcalendar/react";
 import { atom, useRecoilState } from "recoil";
 import { dateToString } from "src/util/date";
@@ -52,7 +53,7 @@ export default function useSchedule() {
     isFinishedView = false,
     day = null
   ) => {
-    return scheduleList.filter((schedule) => {
+    const filterList = scheduleList.filter((schedule) => {
       if (isFinishedView || !schedule.isFinished) {
         if (groupId) {
           if (schedule.groupId === groupId) {
@@ -81,6 +82,7 @@ export default function useSchedule() {
         }
       }
     });
+    return filterList;
   };
 
   // ? 스캐줄 생성

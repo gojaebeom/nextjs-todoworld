@@ -91,9 +91,9 @@ export default function useTheme() {
       // 진한 하늘색
       case "#27aae1":
         lightColor = "#85C1E9";
-        strongColor = "#27aae1";
+        strongColor = "#0c95cf";
         borderStyles = "border-[#27aae1]";
-        buttonStyles = "bg-[#27aae1] hover:bg-[#2295C7] focus:ring-[#27aae1]";
+        buttonStyles = "bg-[#27aae1] hover:bg-[#0c95cf] focus:ring-[#27aae1]";
         inputStyles = "focus:ring-[#27aae1]";
         break;
       // 캔디콘

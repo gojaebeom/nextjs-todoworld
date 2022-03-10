@@ -8,6 +8,7 @@ import useImageCrop from "./useImageCrop";
 import useSchedule from "./useSchedule";
 import useGroup from "./useGourp";
 import useToast, { useEmojiToast } from "./useToast";
+import useStorage from "./useStorage";
 
 export {
   useTheme,
@@ -21,4 +22,5 @@ export {
   useGroup,
   useToast,
   useEmojiToast,
+  useStorage,
 };

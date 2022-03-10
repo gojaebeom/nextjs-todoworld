@@ -5,7 +5,7 @@ export default function GlobalModal({ children }) {
   
   return (
     <div
-      className={`fixed top-0 left-0 z-50 flex items-center justify-center w-full h-full bg-white/80
+      className={`fixed top-0 left-0 z-50 flex items-center justify-center w-full h-full bg-black/50
       ${modal.backgroundClick && "cursor-pointer"}`}
       onClick={() => {
         modal.backgroundClick && closeModal();
@@ -15,7 +15,7 @@ export default function GlobalModal({ children }) {
       <div
         className={`min-w-[350px]  pb-0 flex flex-col bg-white text-black 
         overflow-hidden shadow-lg transition-all duration-200 cursor-default
-        rounded-lg border`}
+        rounded-lg`}
         onClick={(e) => {
           e.stopPropagation();
         }}

@@ -1,8 +1,15 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable @next/next/no-img-element */
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { ThemeArea, ThemeButton } from "src/components";
-import { useGlobalModal, useSchedule, useTheme, useWorld } from "src/hooks";
+import {
+  useGlobalModal,
+  useSchedule,
+  useStorage,
+  useTheme,
+  useWorld,
+} from "src/hooks";
 
 import { DateRange } from "react-date-range";
 import ko from "date-fns/locale/ko";
@@ -29,6 +36,12 @@ export default function ScheduleEditForm() {
   const { type } = getMatchedThemeData();
   const { worldDetail } = useWorld();
   const { edit, destroy } = useSchedule();
+  const { setStorage, getStorage, destroyStorage } = useStorage();
+
+  useEffect(() => {
+    const item = getStorage("s_scgi");
+    setCheckedGroupId(item);
+  }, []);
 
   return (
     <form
@@ -64,28 +77,40 @@ export default function ScheduleEditForm() {
       />
       <label className="text-xs text-gray-500">그룹선택</label>
       <div className="flex flex-wrap mb-4">
-        <button
+        <div
           type="button"
-          className={`px-2 mb-1 mr-1 text-sm text-white rounded-xl bg-gray-500 ${
-            checkedGroupId === null && "border-2 border-gray-600"
-          }`}
-          onClick={() => setCheckedGroupId(null)}
+          className={`px-2 mb-1 mr-1 text-sm text-white rounded-xl bg-gray-500 flex cursor-pointer`}
+          onClick={() => {
+            setCheckedGroupId(null);
+            destroyStorage("s_scgi");
+          }}
         >
           전체
-        </button>
+          <span className={`${checkedGroupId === null ? "block" : "hidden"}`}>
+            <i className="ml-1 fa-light fa-location-check"></i>
+          </span>
+        </div>
         {worldDetail.groups?.map((group, i) => {
           return (
-            <button
+            <div
               type="button"
               key={i}
-              className={`px-2 mb-1 mr-1 text-sm text-white rounded-xl ${
-                checkedGroupId === group.id && "border-2 border-gray-600"
-              }`}
+              className={`px-2 mb-1 mr-1 text-sm text-white rounded-xl flex cursor-pointer`}
               style={{ backgroundColor: group.color }}
-              onClick={() => setCheckedGroupId(group.id)}
+              onClick={() => {
+                setCheckedGroupId(group.id);
+                setStorage("s_scgi", group.id);
+              }}
             >
               {group.name}
-            </button>
+              <span
+                className={`${
+                  checkedGroupId === group.id ? "block" : "hidden"
+                }`}
+              >
+                <i className="ml-1 fa-light fa-location-check"></i>
+              </span>
+            </div>
           );
         })}
       </div>

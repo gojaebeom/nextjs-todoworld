@@ -1,50 +1,80 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable @next/next/no-img-element */
 import FullCalendar, { addDays } from "@fullcalendar/react";
 import dayGridPlugin from "@fullcalendar/daygrid"; // a plugin!
 import interactionPlugin from "@fullcalendar/interaction"; // needed for dayClick
-import { useGlobalModal, useSchedule, useTheme, useWorld } from "src/hooks";
-import { useState } from "react";
+import {
+  useGlobalModal,
+  useSchedule,
+  useStorage,
+  useTheme,
+  useUser,
+  useWorld,
+} from "src/hooks";
+import { useState, useEffect } from "react";
 import { dateToString } from "src/util/date";
 import { ImageOrDefault } from "src/components";
 import { GlobalModal, WorldScheduleEditForm } from "src/containers";
 
 export default function ScheduleRoom() {
   const { getMatchedThemeData } = useTheme();
-  const { type } = getMatchedThemeData();
+  const { type, lightColor } = getMatchedThemeData();
+
   const { worldDetail, memberList } = useWorld();
   const [checkedGroupId, setCheckedGroupId] = useState(null);
   const [checkedDate, setCheckedDate] = useState(null);
   const [checkedFinishView, setCheckedFinishView] = useState(true);
-  const { scheduleList, getFilterScheduleList, changeFinished } = useSchedule();
+  const { getFilterScheduleList, changeFinished } = useSchedule();
   const { openModal, drawTypeMatchedModal } = useGlobalModal();
+  const { setStorage, getStorage, destroyStorage } = useStorage();
+  const { user } = useUser();
+
+  useEffect(() => {
+    const groupId = getStorage("scgi");
+    const finishView = getStorage("scf");
+    setCheckedGroupId(groupId);
+    setCheckedFinishView(finishView === "true" ? true : false);
+  }, []);
 
   return (
     <>
       <div className="w-full h-full p-6">
         <div className="flex flex-wrap">
-          <button
+          <div
             type="button"
-            className={`px-2 mb-1 mr-1 text-sm text-white rounded-xl ${
-              checkedGroupId === null && `border border-black`
-            }`}
+            className="flex px-2 mb-1 mr-1 text-sm text-white cursor-pointer rounded-xl"
             style={{ backgroundColor: type }}
-            onClick={() => setCheckedGroupId(null)}
+            onClick={() => {
+              setCheckedGroupId(null);
+              destroyStorage("scgi");
+            }}
           >
-            전체
-          </button>
+            <span>전체</span>
+            <span className={`${checkedGroupId === null ? "block" : "hidden"}`}>
+              <i className="ml-1 fa-light fa-location-check"></i>
+            </span>
+          </div>
           {worldDetail?.groups?.map((group, i) => {
             return (
-              <button
+              <div
                 type="button"
                 key={i}
-                className={`px-2 mb-1 mr-1 text-sm text-white rounded-xl ${
-                  checkedGroupId === group.id && `border border-black`
-                }`}
+                className="flex px-2 mb-1 mr-1 text-sm text-white cursor-pointer rounded-xl"
                 style={{ backgroundColor: group.color }}
-                onClick={() => setCheckedGroupId(group.id)}
+                onClick={() => {
+                  setCheckedGroupId(group.id);
+                  setStorage("scgi", group.id);
+                }}
               >
-                {group.name}
-              </button>
+                <span>{group.name}</span>
+                <span
+                  className={`${
+                    checkedGroupId === group.id ? "block" : "hidden"
+                  }`}
+                >
+                  <i className="ml-1 fa-light fa-location-check"></i>
+                </span>
+              </div>
             );
           })}
           <button
@@ -53,7 +83,10 @@ export default function ScheduleRoom() {
               color: !checkedFinishView && type,
               border: !checkedFinishView && `1px solid ${type}`,
             }}
-            onClick={() => setCheckedFinishView(!checkedFinishView)}
+            onClick={() => {
+              setCheckedFinishView(!checkedFinishView);
+              setStorage("scf", !checkedFinishView);
+            }}
           >
             완료한 일정 숨기기
           </button>
@@ -71,6 +104,11 @@ export default function ScheduleRoom() {
           plugins={[dayGridPlugin, interactionPlugin]}
           initialView="dayGridMonth" //
           eventClick={(e) => {
+            console.debug(e.event.extendedProps.userId);
+            if (e.event.extendedProps.userId !== user.id) {
+              return window.alert("수정 권한이 없습니다!");
+            }
+
             openModal("SCHEDULE_EDIT_FORM", "일정 수정", false, {
               id: e.event.id,
               title: e.event.title,
@@ -79,7 +117,23 @@ export default function ScheduleRoom() {
               end: addDays(e.event.end, -1),
             });
           }}
-          dateClick={(e) => setCheckedDate(e.dateStr)}
+          dateClick={(e) => {
+            document.querySelectorAll("td").forEach((td) => {
+              if (
+                td === e.dayEl &&
+                td !== document.querySelector(".fc-day-today")
+              ) {
+                e.dayEl.style.background = "#F2F2F2";
+              } else if (
+                td !== e.dayEl &&
+                td !== document.querySelector(".fc-day-today")
+              ) {
+                td.style.background = "none";
+              }
+            });
+
+            setCheckedDate(e.dateStr);
+          }}
           dayMaxEvents={true} // 이벤트가 오버되면 높이 제한 (+ 몇 개식으로 표현)
           //scheduleList
           events={getFilterScheduleList(checkedGroupId, checkedFinishView)}
@@ -89,9 +143,9 @@ export default function ScheduleRoom() {
               if (target.event.groupId === group.id) color = group.color;
             });
             return (
-              <div className="bg-white rounded-3xl">
+              <div>
                 <div
-                  className="px-2 overflow-hidden text-white border border-white rounded-3xl"
+                  className="mb-0.5 px-2 border-x overflow-hidden text-white rounded-3xl text-ellipsis"
                   style={{
                     backgroundColor: color ? color : type,
                   }}
@@ -104,13 +158,17 @@ export default function ScheduleRoom() {
           // eslint-disable-next-line react/jsx-no-duplicate-props
         />
       </div>
-      <div className="min-w-[320px] max-w-[320px] h-full bg-gray-50 p-2 text-gray-700">
-        <div className="mb-4 text-2xl font-pre-bb">
-          {checkedDate === null ? "오늘" : checkedDate}
-          &nbsp;일정
+      <div className="min-w-[320px] max-w-[320px] h-full bg-gray-50 p-2 text-gray-600">
+        <div className="m-2 text-xl font-pre-b">
+          <span>{checkedDate === null ? dateToString() : checkedDate}</span>
+          <i className="ml-1 fa-light fa-calendar-star"></i>
         </div>
         <div className="h-[95%] overflow-y-auto custom-scroll">
-          {scheduleList.length ? (
+          {getFilterScheduleList(
+            checkedGroupId,
+            checkedFinishView,
+            checkedDate ? checkedDate : dateToString()
+          ).length ? (
             getFilterScheduleList(
               checkedGroupId,
               checkedFinishView,
@@ -139,7 +197,12 @@ export default function ScheduleRoom() {
                             style={{
                               color: schedule.isFinished && type,
                             }}
-                            onClick={() => changeFinished(schedule)}
+                            onClick={() => {
+                              if (member.id !== user.id) {
+                                return window.alert("수정 권한이 없습니다!");
+                              }
+                              changeFinished(schedule);
+                            }}
                           >
                             <i className="absolute top-0 right-0 m-2 text-xl fa-light fa-badge-check"></i>
                           </button>

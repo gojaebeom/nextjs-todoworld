@@ -23,6 +23,7 @@ import { withPrivate } from "src/hoc";
 export default withPrivate(function WorldPage() {
   const { user } = useUser();
   const { theme, getMatchedThemeData } = useTheme();
+  const { lightColor, strongColor } = getMatchedThemeData();
   const { openModal, drawTypeMatchedModal } = useGlobalModal();
   const { worldDetail, isValidWorldByWid, setWorldDetailStream, memberList } =
     useWorld();
@@ -71,15 +72,28 @@ export default withPrivate(function WorldPage() {
                   className="flex flex-col items-center justify-center w-full mt-1 font-pre-b"
                   key={member.id}
                 >
-                  <div>
-                    LV.&nbsp;
-                    <span className="text-2xl">{member?.level}</span>
+                  <div className="flex items-end justify-between w-2/3">
+                    <div className="ml-1">
+                      LV.&nbsp;
+                      <span className="text-2xl">{member?.level}</span>
+                    </div>
+                    <div className="font-pre-r">
+                      <span className="text-sm">{member?.exp}%</span>
+                    </div>
                   </div>
 
-                  <div className="w-2/3 h-4 ml-2 overflow-hidden border rounded-2xl">
+                  <div
+                    className="w-2/3 h-4 ml-2 bg-white rounded-2xl"
+                    style={{
+                      border: `2px solid ${strongColor}`,
+                    }}
+                  >
                     <div
-                      className="h-full transition-all duration-200 bg-white rounded-r-2xl"
-                      style={{ width: member.exp + "%" }}
+                      className="h-full transition-all duration-200 bg-white"
+                      style={{
+                        width: member.exp + "%",
+                        backgroundColor: strongColor,
+                      }}
                     ></div>
                   </div>
                 </div>

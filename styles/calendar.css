@@ -38,13 +38,17 @@
 }
 
 .fc td {
+  cursor: pointer;
   border: 1px solid #f2f2f2 !important;
   border-left: none !important;
   border-right: none !important;
+}
+.fc-day:hover {
+  background: #f2f2f2;
 }
 
 .fc-h-event {
   border: none !important;
   border-radius: 30px !important;
-  /* background-color: white; */
+  background: none !important;
 }

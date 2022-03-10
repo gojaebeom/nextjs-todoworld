@@ -1,4 +1,5 @@
 /* eslint-disable @next/next/no-img-element */
+import { useState } from "react";
 
 export default function ImageOrDefault({
   src,
@@ -7,9 +8,12 @@ export default function ImageOrDefault({
   width,
   height,
 }) {
+  const [sizeUp, setSizeUp] = useState(false);
+
   return (
-    <div
-      className={"flex items-center justify-center overflow-hidden ".concat(className)}
+    <button
+      onClick={() => setSizeUp(true)}
+      className={`flex items-center justify-center overflow-hidden ${className}`}
       style={{ width: width, height: height }}
     >
       <img
@@ -17,6 +21,6 @@ export default function ImageOrDefault({
         alt={alt}
         className="w-full h-full"
       />
-    </div>
+    </button>
   );
 }
